@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        {% if cuenta %}
+            Editar Cuenta Contable
+        {% elif titulo %}
+            {{ titulo }}
+        {% else %}
+            Nueva Cuenta Contable
+        {% endif %}
+    </h2>
+
+    <!-- MENSAJES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- FORMULARIO -->
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form %}
+            <!-- FORM desde Django Forms -->
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+
+        {% else %}
+            <!-- FORM manual (create/edit viejo) -->
+            <div class="mb-3">
+                <label class="form-label">Código</label>
+                <input type="text" name="codigo" class="form-control"
+                       value="{{ cuenta.codigo|default:'' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control"
+                       value="{{ cuenta.nombre|default:'' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de Cuenta</label>
+                <select name="tipo" class="form-control">
+                    <option value="Activo" {% if cuenta.tipo == "Activo" %}selected{% endif %}>Activo</option>
+                    <option value="Pasivo" {% if cuenta.tipo == "Pasivo" %}selected{% endif %}>Pasivo</option>
+                    <option value="Patrimonio" {% if cuenta.tipo == "Patrimonio" %}selected{% endif %}>Patrimonio</option>
+                    <option value="Ingreso" {% if cuenta.tipo == "Ingreso" %}selected{% endif %}>Ingreso</option>
+                    <option value="Gasto" {% if cuenta.tipo == "Gasto" %}selected{% endif %}>Gasto</option>
+                </select>
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'contabilidad:cuentas_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Nuevo Asiento{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Nuevo Asiento Contable</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="bg-white p-4 rounded shadow mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="font-semibold">Número</label>
+                {{ form.numero }}
+            </div>
+            <div>
+                <label class="font-semibold">Fecha</label>
+                {{ form.fecha }}
+            </div>
+            <div>
+                <label class="font-semibold">Descripción</label>
+                {{ form.descripcion }}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-lg font-semibold mb-3">Líneas del Asiento</h2>
+
+        <table class="min-w-full text-sm" id="tabla-lineas">
+            <thead>
+                <tr class="bg-gray-100 text-gray-700">
+                    <th class="p-2">Cuenta</th>
+                    <th class="p-2">Detalle</th>
+                    <th class="p-2">Debe</th>
+                    <th class="p-2">Haber</th>
+                    <th class="p-2"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <button type="button" id="add-row"
+                class="mt-4 px-3 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700">
+            + Agregar línea
+        </button>
+    </div>
+
+    <div class="mt-6 flex justify-end gap-4">
+        <a href="{% url 'contabilidad:asientos_list' %}"
+           class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+           Cancelar
+        </a>
+        <button class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
+            Guardar Asiento
+        </button>
+    </div>
+</form>
+
+<script>
+document.getElementById("add-row").addEventListener("click", function () {
+    const tbody = document.querySelector("#tabla-lineas tbody");
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td class="p-2">
+            <select name="cuenta" class="w-full border rounded p-1">
+                {% for c in cuentas %}
+                <option value="{{ c.id }}">{{ c.codigo }} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td class="p-2">
+            <input name="detalle" class="border rounded w-full p-1" />
+        </td>
+        <td class="p-2">
+            <input name="debe" step="0.01" type="number" class="border rounded w-full p-1" />
+        </td>
+        <td class="p-2">
+            <input name="haber" step="0.01" type="number" class="border rounded w-full p-1" />
+        </td>
+        <td class="p-2 text-center">
+            <button type="button" onclick="this.parentNode.parentNode.remove()"
+                    class="text-red-600 hover:text-red-800">
+                Eliminar
+            </button>
+        </td>
+    `;
+
+    tbody.appendChild(row);
+});
+</script>
+{% endblock %}

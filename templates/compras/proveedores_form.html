@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Proveedor – SIAC Perforosven{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+        {% if form.instance.pk %}Editar Proveedor{% else %}Nuevo Proveedor{% endif %}
+    </h2>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">{{ field.label }}</label>
+                {{ field|as_widget:attrs }}
+                {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="flex justify-end space-x-3 mt-6">
+            <a href="{% url 'proveedor_list' %}" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancelar</a>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                💾 Guardar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

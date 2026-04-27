@@ -1,0 +1,45 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Plan de Cuentas{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-semibold">Plan de Cuentas</h2>
+    <a href="{% url 'contabilidad:cuentas_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded">Nueva Cuenta</a>
+</div>
+
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-gray-100">
+            <tr class="text-left text-gray-700">
+                <th class="p-3">Código</th>
+                <th class="p-3">Nombre</th>
+                <th class="p-3">Tipo</th>
+                <th class="p-3">Nivel</th>
+                <th class="p-3">Activo</th>
+                <th class="p-3">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cuentas %}
+            <tr class="border-t hover:bg-gray-50">
+                <td class="p-3">{{ c.codigo }}</td>
+                <td class="p-3">{{ c.nombre }}</td>
+                <td class="p-3">{{ c.get_tipo_display }}</td>
+                <td class="p-3">{{ c.nivel }}</td>
+                <td class="p-3">{% if c.es_activo %}Sí{% else %}No{% endif %}</td>
+                <td class="p-3">
+                    <a href="{% url 'contabilidad:cuentas_edit' c.pk %}" class="text-indigo-600 mr-2">Editar</a>
+                    <form action="{% url 'contabilidad:cuentas_delete' c.pk %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button class="text-red-600" onclick="return confirm('Eliminar cuenta?')">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="p-4 text-center text-gray-500">No hay cuentas registradas.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

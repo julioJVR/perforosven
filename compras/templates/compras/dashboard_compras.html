@@ -1,0 +1,60 @@
+{% extends 'compras/base_compras.html' %}
+{% block title %}Módulo de Compras{% endblock %}
+
+{% block content %}
+<div class="p-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+    Panel del Módulo de Compras
+  </h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- 🔹 Proveedores -->
+    <a href="{% url 'compras:lista_proveedores' %}"
+      class="block bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform hover:scale-105 border border-gray-100">
+      <div class="p-6 text-center">
+        <div class="bg-blue-100 rounded-full p-3 inline-block mb-3">
+          <i class="bi bi-truck text-blue-600 text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Proveedores</h2>
+        <p class="text-gray-500 text-sm">Registrados: {{ total_proveedores }}</p>
+      </div>
+    </a>
+
+    <!-- 🔹 Productos -->
+    <a href="{% url 'compras:lista_productos' %}"
+      class="block bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform hover:scale-105 border border-gray-100">
+      <div class="p-6 text-center">
+        <div class="bg-green-100 rounded-full p-3 inline-block mb-3">
+          <i class="bi bi-box-seam text-green-600 text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Productos</h2>
+        <p class="text-gray-500 text-sm">Registrados: {{ total_productos }}</p>
+      </div>
+    </a>
+
+    <!-- 🔹 Órdenes de Compra -->
+    <a href="{% url 'compras:lista_ordenes' %}"
+      class="block bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform hover:scale-105 border border-gray-100">
+      <div class="p-6 text-center">
+        <div class="bg-yellow-100 rounded-full p-3 inline-block mb-3">
+          <i class="bi bi-file-earmark-text text-yellow-600 text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Órdenes de Compra</h2>
+        <p class="text-gray-500 text-sm">Registradas: {{ total_ordenes }}</p>
+      </div>
+    </a>
+
+    <!-- 🔹 Facturación -->
+    <a href="{% url 'compras:lista_facturas' %}"
+      class="block bg-white rounded-2xl shadow-md hover:shadow-lg transition-transform hover:scale-105 border border-gray-100">
+      <div class="p-6 text-center">
+        <div class="bg-purple-100 rounded-full p-3 inline-block mb-3">
+          <i class="bi bi-receipt-cutoff text-purple-600 text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Facturación</h2>
+        <p class="text-gray-500 text-sm">Facturas registradas: {{ total_facturas }}</p>
+      </div>
+    </a>
+  </div>
+</div>
+{% endblock %}

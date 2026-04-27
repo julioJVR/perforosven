@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">
+        {% if form.instance.pk %}
+            Editar Cotización
+        {% else %}
+            Registrar Cotización
+        {% endif %}
+    </h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- ======= FORMULARIO PRINCIPAL ======= -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                Datos de la Cotización
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.cliente.label_tag }}
+                        {{ form.cliente }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.contrato.label_tag }}
+                        {{ form.contrato }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.numero.label_tag }}
+                        {{ form.numero }}
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        {{ form.fecha.label_tag }}
+                        {{ form.fecha }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.fecha_servicio.label_tag }}
+                        {{ form.fecha_servicio }}
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    {{ form.observaciones.label_tag }}
+                    {{ form.observaciones }}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======= DETALLE DE COTIZACIÓN ======= -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                Detalles de Cotización
+            </div>
+            <div class="card-body">
+
+                <table class="table table-bordered" id="tabla-detalles">
+                    <thead>
+                        <tr>
+                            <th>Partida</th>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas generadas dinámicamente -->
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success" id="btn-agregar-detalle">
+                    + Agregar Ítem
+                </button>
+
+                <div class="mt-4 text-end">
+                    <h4>Total: <span id="total-cotizacion">0.00</span> USD</h4>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary">Guardar</button>
+            <a href="{% url 'ventas:cotizaciones_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+let partidasContrato = [];
+
+// ======= CARGAR PARTIDAS AL CAMBIAR CONTRATO =======
+document.addEventListener("DOMContentLoaded", () => {
+
+    const contratoSelect = document.getElementById("id_contrato");
+
+    contratoSelect.addEventListener("change", function () {
+        let contratoId = this.value;
+
+        if (!contratoId) return;
+
+        fetch(`/ventas/contratos/${contratoId}/partidas/`)
+            .then(res => res.json())
+            .then(data => {
+                partidasContrato = data.partidas;
+            });
+    });
+});
+
+// ======= AGREGAR FILA DETALLE =======
+document.getElementById("btn-agregar-detalle").addEventListener("click", function () {
+    const tabla = document.querySelector("#tabla-detalles tbody");
+
+    let opciones = partidasContrato.map(p => 
+        `<option value="${p.id}">${p.nombre}</option>`
+    ).join("");
+
+    let fila = `
+        <tr>
+            <td>
+                <select class="form-select partida-select">${opciones}</select>
+            </td>
+            <td><input type="text" class="form-control descripcion"></td>
+            <td><input type="number" step="0.01" class="form-control cantidad"></td>
+            <td><input type="number" step="0.01" class="form-control precio"></td>
+            <td class="subtotal">0.00</td>
+            <td><button class="btn btn-danger btn-sm eliminar">X</button></td>
+        </tr>
+    `;
+
+    tabla.insertAdjacentHTML("beforeend", fila);
+});
+
+// ======= CALCULAR SUBTOTALES Y TOTAL =======
+document.querySelector("#tabla-detalles").addEventListener("input", function (e) {
+    if (e.target.classList.contains("cantidad") || e.target.classList.contains("precio")) {
+        const fila = e.target.closest("tr");
+
+        let cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
+        let precio = parseFloat(fila.querySelector(".precio").value) || 0;
+
+        let subtotal = cantidad * precio;
+        fila.querySelector(".subtotal").textContent = subtotal.toFixed(2);
+
+        calcularTotal();
+    }
+});
+
+function calcularTotal() {
+    let total = 0;
+    document.querySelectorAll(".subtotal").forEach(st => {
+        total += parseFloat(st.textContent);
+    });
+
+    document.getElementById("total-cotizacion").textContent = total.toFixed(2);
+}
+
+// ======= ELIMINAR FILA =======
+document.querySelector("#tabla-detalles").addEventListener("click", function (e) {
+    if (e.target.classList.contains("eliminar")) {
+        e.target.closest("tr").remove();
+        calcularTotal();
+    }
+});
+</script>
+
+{% endblock %}

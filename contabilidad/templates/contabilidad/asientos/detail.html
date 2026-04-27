@@ -1,0 +1,41 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Asiento {{ asiento.numero }}{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Detalle del Asiento #{{ asiento.numero }}</h1>
+
+<div class="bg-white p-4 rounded shadow mb-6">
+    <p><strong>Fecha:</strong> {{ asiento.fecha }}</p>
+    <p><strong>Descripción:</strong> {{ asiento.descripcion }}</p>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+    <table class="min-w-full text-sm">
+        <thead>
+            <tr class="bg-gray-100 text-gray-700">
+                <th class="p-2 text-left">Cuenta</th>
+                <th class="p-2 text-left">Detalle</th>
+                <th class="p-2 text-right">Debe</th>
+                <th class="p-2 text-right">Haber</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for linea in lineas %}
+            <tr class="border-b">
+                <td class="p-2">{{ linea.cuenta.codigo }} - {{ linea.cuenta.nombre }}</td>
+                <td class="p-2">{{ linea.detalle }}</td>
+                <td class="p-2 text-right">{{ linea.debe }}</td>
+                <td class="p-2 text-right">{{ linea.haber }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-6">
+    <a href="{% url 'contabilidad:asientos_list' %}"
+       class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+       Volver
+    </a>
+</div>
+{% endblock %}

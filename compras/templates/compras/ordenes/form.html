@@ -1,0 +1,21 @@
+{% extends "compras/base_compras.html" %}
+{% block title %}Formulario de Orden de Compra{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-6 text-indigo-800">Registrar / Editar Orden</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="mt-6 flex justify-end">
+            <a href="{% url 'compras:lista_ordenes' %}" 
+               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mr-2">
+               Cancelar
+            </a>
+            <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg">
+                Guardar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

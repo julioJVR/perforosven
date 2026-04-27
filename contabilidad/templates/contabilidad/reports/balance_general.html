@@ -1,0 +1,58 @@
+{% extends "contabilidad/reports/_layout_reportes.html" %}
+{% block reporte_contenido %}
+
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Activos</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in activos %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Pasivos</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in pasivos %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Patrimonio</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in patrimonio %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

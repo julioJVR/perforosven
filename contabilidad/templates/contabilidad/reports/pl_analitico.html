@@ -1,0 +1,47 @@
+{% extends "contabilidad/reports/_layout_reportes.html" %}
+{% block reporte_contenido %}
+
+<h2 class="text-xl font-semibold text-gray-700 mb-4">Pérdidas y Ganancias (Analítico)</h2>
+
+<table class="w-full text-sm mb-6">
+    <thead class="bg-indigo-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in cuentas %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="text-xl font-semibold text-gray-700 mb-4">Gráfico Analítico Mensual</h2>
+<canvas id="chartPL" height="80"></canvas>
+
+<!-- prettier-ignore -->
+<!-- eslint-disable -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById("chartER");
+
+new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: "Resultado del período",
+            data: {{ valores|safe }},
+            borderWidth: 3
+        }]
+    }
+});
+</script>
+
+{% endblock %}

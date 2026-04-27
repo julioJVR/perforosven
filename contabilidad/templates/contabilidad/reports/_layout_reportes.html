@@ -1,0 +1,54 @@
+{% extends "core/base_siac.html" %}
+{% load static %}
+
+{% block content %}
+<div class="p-6">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-4 text-gray-500">
+        <a href="{% url 'contabilidad:dashboard_contabilidad' %}" class="hover:text-blue-600">Contabilidad</a>
+        <span class="mx-2">/</span>
+        <a href="{% url 'contabilidad:menu_reportes' %}" class="hover:text-blue-600">Reportes Contables (NIIF)</a>
+        <span class="mx-2">/</span>
+        <span class="font-semibold text-gray-700">{{ titulo }}</span>
+    </nav>
+
+    <!-- Título principal -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ titulo }}</h1>
+
+    <!-- Filtros -->
+    <form method="get" class="flex gap-4 mb-6">
+        <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Desde</label>
+            <input type="date" name="desde" value="{{ request.GET.desde }}" class="border rounded-lg px-3 py-2 w-48">
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Hasta</label>
+            <input type="date" name="hasta" value="{{ request.GET.hasta }}" class="border rounded-lg px-3 py-2 w-48">
+        </div>
+
+        <div class="flex items-end">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">
+                Filtrar
+            </button>
+        </div>
+    </form>
+
+    <!-- Botones Exportar -->
+    <div class="flex gap-3 mb-6">
+        <a href="?export=pdf" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow">
+            Exportar PDF
+        </a>
+        <a href="?export=excel" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow">
+            Exportar Excel
+        </a>
+    </div>
+
+    <!-- Contenido del reporte -->
+    <div class="bg-white shadow rounded-2xl p-6">
+        {% block reporte_contenido %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

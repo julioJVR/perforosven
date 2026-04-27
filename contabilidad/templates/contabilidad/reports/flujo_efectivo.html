@@ -1,0 +1,83 @@
+{% extends "contabilidad/reports/_layout_reportes.html" %}
+{% block reporte_contenido %}
+
+<h1 class="text-2xl font-bold mb-6 text-gray-700">Flujo de Efectivo</h1>
+
+<!-- OPERACIÓN -->
+<h2 class="text-lg font-semibold mb-2">Actividades de Operación</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in operacion %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="font-bold bg-gray-200">
+            <td class="px-3 py-2">TOTAL OPERACIÓN</td>
+            <td class="px-3 py-2 text-right">{{ total_operacion|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- INVERSIÓN -->
+<h2 class="text-lg font-semibold mb-2">Actividades de Inversión</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-purple-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in inversion %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="font-bold bg-gray-200">
+            <td class="px-3 py-2">TOTAL INVERSIÓN</td>
+            <td class="px-3 py-2 text-right">{{ total_inversion|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- FINANCIACIÓN -->
+<h2 class="text-lg font-semibold mb-2">Actividades de Financiación</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-green-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in financiacion %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="font-bold bg-gray-200">
+            <td class="px-3 py-2">TOTAL FINANCIACIÓN</td>
+            <td class="px-3 py-2 text-right">{{ total_financiacion|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- RESULTADO -->
+<table class="w-full text-lg font-bold bg-gray-300">
+    <tr>
+        <td class="px-4 py-4">VARIACIÓN DEL EFECTIVO DEL PERIODO</td>
+        <td class="px-4 py-4 text-right">{{ variacion_efectivo|floatformat:2 }}</td>
+    </tr>
+</table>
+
+{% endblock %}

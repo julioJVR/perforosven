@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="flex justify-between mb-4">
+    <h1 class="text-2xl font-bold">Cotizaciones</h1>
+    <a href="{% url 'ventas:cotizacion_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded">
+        Nueva Cotización
+    </a>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Cliente</th>
+                <th>Contrato</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for c in cotizaciones %}
+            <tr class="border-b">
+                <td>{{ c.numero }}</td>
+                <td>{{ c.cliente.nombre }}</td>
+                <td>{{ c.contrato.numero }}</td>
+                <td>{{ c.fecha }}</td>
+                <td>{{ c.monto_total }}</td>
+                <td>{{ c.get_estado_display }}</td>
+                <td>
+                    <a href="{% url 'ventas:cotizacion_edit' c.pk %}" class="text-blue-600">Editar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center py-4 text-gray-500">
+                    No hay cotizaciones registradas.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

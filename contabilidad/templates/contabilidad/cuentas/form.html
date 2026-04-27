@@ -1,0 +1,58 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Cuenta Contable{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">
+    {% if objeto %}Editar Cuenta{% else %}Nueva Cuenta{% endif %}
+</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="bg-white p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="font-semibold">Código</label>
+            {{ form.codigo }}
+        </div>
+        <div>
+            <label class="font-semibold">Nombre</label>
+            {{ form.nombre }}
+        </div>
+        <div>
+            <label class="font-semibold">Tipo</label>
+            {{ form.tipo }}
+        </div>
+        <div>
+            <label class="font-semibold">Naturaleza</label>
+            {{ form.naturaleza }}
+        </div>
+        <div>
+            <label class="font-semibold">Nivel</label>
+            {{ form.nivel }}
+        </div>
+        <div>
+            <label class="font-semibold">Cuenta Padre</label>
+            {{ form.padre }}
+        </div>
+        <div>
+            <label class="font-semibold">Activa</label>
+            {{ form.es_activo }}
+        </div>
+        <div class="md:col-span-2">
+            <label class="font-semibold">Descripción</label>
+            {{ form.descripcion }}
+        </div>
+    </div>
+
+    <div class="flex justify-end gap-4">
+        <a href="{% url 'contabilidad:cuentas_list' %}"
+           class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+            Cancelar
+        </a>
+
+        <button class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
+            Guardar
+        </button>
+    </div>
+</form>
+{% endblock %}

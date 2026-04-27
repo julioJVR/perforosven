@@ -1,0 +1,58 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Plan de Cuentas{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Plan de Cuentas</h1>
+    <a href="{% url 'contabilidad:cuentas_create' %}"
+       class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
+        Nueva Cuenta
+    </a>
+</div>
+
+<div class="bg-white rounded shadow p-4">
+    <table class="min-w-full text-sm">
+        <thead>
+            <tr class="bg-gray-100 text-gray-700">
+                <th class="p-2 text-left">Código</th>
+                <th class="p-2 text-left">Nombre</th>
+                <th class="p-2 text-left">Tipo</th>
+                <th class="p-2 text-left">Nivel</th>
+                <th class="p-2 text-center">Activo</th>
+                <th class="p-2 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for c in cuentas %}
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-2">{{ c.codigo }}</td>
+                <td class="p-2">{{ c.nombre }}</td>
+                <td class="p-2">{{ c.tipo }}</td>
+                <td class="p-2">{{ c.nivel }}</td>
+                <td class="p-2 text-center">
+                    {% if c.es_activo %}
+                        <span class="text-green-600 font-semibold">Sí</span>
+                    {% else %}
+                        <span class="text-red-600 font-semibold">No</span>
+                    {% endif %}
+                </td>
+                <td class="p-2 text-center">
+                    <a href="{% url 'contabilidad:cuentas_edit' c.pk %}"
+                       class="text-blue-600 hover:text-blue-800 mr-2">
+                        Editar
+                    </a>
+                    <a href="{% url 'contabilidad:cuentas_delete' c.pk %}"
+                       class="text-red-600 hover:text-red-800">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="6" class="p-4 text-center text-gray-500">
+                No hay cuentas registradas.
+            </td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

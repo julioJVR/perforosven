@@ -1,0 +1,88 @@
+{% extends "contabilidad/reports/_layout_reportes.html" %}
+{% block reporte_contenido %}
+
+<!-- INGRESOS -->
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Ingresos</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-green-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in ingresos %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+
+        <tr class="font-bold bg-gray-100">
+            <td class="px-3 py-2 text-left">TOTAL INGRESOS</td>
+            <td class="px-3 py-2 text-right">{{ total_ingresos|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- GASTOS -->
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Gastos</h2>
+<table class="w-full text-sm mb-6">
+    <thead class="bg-red-600 text-white">
+        <tr>
+            <th class="px-3 py-2 text-left">Cuenta</th>
+            <th class="px-3 py-2 text-right">Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in gastos %}
+        <tr class="border-b">
+            <td class="px-3 py-2">{{ c.codigo }} - {{ c.nombre }}</td>
+            <td class="px-3 py-2 text-right">{{ c.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+
+        <tr class="font-bold bg-gray-100">
+            <td class="px-3 py-2 text-left">TOTAL GASTOS</td>
+            <td class="px-3 py-2 text-right">{{ total_gastos|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- UTILIDAD / RESULTADO -->
+<table class="w-full text-sm mb-10">
+    <tbody>
+        <tr class="font-bold bg-gray-200 text-lg">
+            <td class="px-3 py-3 text-left">UTILIDAD DEL PERIODO</td>
+            <td class="px-3 py-3 text-right">{{ utilidad|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- GRÁFICO MENSUAL -->
+<h2 class="text-xl font-semibold mb-4 text-gray-700">Comparativo Mensual</h2>
+<canvas id="chartER" class="w-full h-64"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ chart_labels|safe }};
+  const values = {{ chart_values|safe }};
+
+  new Chart(document.getElementById("chartER"), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Resultado del periodo',
+        data: values,
+        tension: 0.3,
+        fill: true
+      }]
+    }
+  });
+</script>
+
+{% endblock %}

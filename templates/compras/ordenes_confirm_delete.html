@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Eliminar Orden{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 text-center">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Eliminar Orden</h2>
+    <p class="mb-6">¿Seguro que deseas eliminar la orden <strong>{{ object.numero_orden }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-center space-x-3">
+            <a href="{% url 'orden_list' %}" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancelar</a>
+            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                🗑️ Eliminar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

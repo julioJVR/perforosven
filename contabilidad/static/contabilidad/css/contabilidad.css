@@ -1,0 +1,4 @@
+/* contabilidad/static/contabilidad/css/contabilidad.css */
+table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+table th, table td { border: 1px solid #ddd; padding: .5rem; }
+.btn { padding:.4rem .8rem; background:#0b74de; color:white; border-radius:4px; text-decoration:none;}

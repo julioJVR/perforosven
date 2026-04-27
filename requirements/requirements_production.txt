@@ -1,0 +1,28 @@
+# ========================================
+# DEPENDENCIAS DE PRODUCCIÓN - PERFOROSVEN
+# ========================================
+# Incluye dependencias base + herramientas de producción
+
+-r base.txt
+
+# Servidor de aplicaciones
+gunicorn==23.0.0
+
+# Caché y performance
+django-redis==5.4.0
+redis==5.2.0
+hiredis==3.0.0  # Cliente Redis más rápido
+
+# Monitoreo de errores
+sentry-sdk==2.19.2
+
+# Compresión y optimización
+django-compressor==4.5.1
+whitenoise==6.8.2  # Servir archivos estáticos
+
+# Seguridad adicional
+django-cors-headers==4.6.0
+
+# Almacenamiento en la nube (opcional)
+# boto3==1.35.91  # Para AWS S3
+# django-storages==1.14.4

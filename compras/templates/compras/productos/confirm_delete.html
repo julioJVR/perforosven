@@ -1,0 +1,20 @@
+{% extends "compras/base_compras.html" %}
+{% block title %}Eliminar Producto{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow max-w-lg mx-auto text-center">
+    <h2 class="text-xl font-semibold text-red-600 mb-4">¿Deseas eliminar este producto?</h2>
+    <p class="mb-6">{{ producto.descripcion }} ({{ producto.codigo }})</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2">
+            Sí, eliminar
+        </button>
+        <a href="{% url 'compras:producto_list' %}" 
+           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+           Cancelar
+        </a>
+    </form>
+</div>
+{% endblock %}

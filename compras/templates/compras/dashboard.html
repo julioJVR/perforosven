@@ -1,0 +1,35 @@
+{% extends 'compras/base_compras.html' %}
+{% block title %}Panel de Compras – SIAC Perforosven{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Panel Principal – Módulo de Compras</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Proveedores -->
+    <a href="{% url 'compras:lista_proveedores' %}" class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2 text-blue-800">
+            <i class="bi bi-truck"></i> Proveedores
+        </h3>
+        <p class="text-gray-600 text-sm mb-3">Gestión de proveedores y datos de contacto.</p>
+        <p class="text-3xl font-bold text-blue-900">{{ total_proveedores }}</p>
+    </a>
+
+    <!-- Productos -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2 text-green-800">
+            <i class="bi bi-box-seam"></i> Productos
+        </h3>
+        <p class="text-gray-600 text-sm mb-3">Gestión de productos y materiales.</p>
+        <p class="text-3xl font-bold text-green-900">{{ total_productos }}</p>
+    </div>
+
+    <!-- Órdenes de compra -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2 text-yellow-700">
+            <i class="bi bi-file-earmark-text"></i> Órdenes de Compra
+        </h3>
+        <p class="text-gray-600 text-sm mb-3">Control de órdenes de compra emitidas.</p>
+        <p class="text-3xl font-bold text-yellow-800">{{ total_ordenes }}</p>
+    </div>
+</div>
+{% endblock %}

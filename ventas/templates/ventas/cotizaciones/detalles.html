@@ -1,0 +1,61 @@
+{% extends "core/base_siac.html" %}
+{% load static %}
+
+{% block title %}Detalles de {{ cotizacion.numero }}{% endblock %}
+
+{% block content %}
+
+<h2 class="text-2xl font-semibold text-blue-900 mb-6">
+    Ítems de la Cotización {{ cotizacion.numero }}
+</h2>
+
+<div class="flex justify-end mb-5">
+    <a href="{% url 'ventas:detalle_create' cotizacion.id %}"
+       class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">
+       + Agregar Ítem
+    </a>
+</div>
+
+<table class="w-full bg-white shadow rounded-lg overflow-hidden">
+    <thead class="bg-blue-700 text-white">
+        <tr>
+            <th class="p-3 text-left">Descripción</th>
+            <th class="p-3 text-left">Cantidad</th>
+            <th class="p-3 text-left">Precio</th>
+            <th class="p-3 text-left">Subtotal</th>
+            <th class="p-3 text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in detalles %}
+        <tr class="border-b">
+            <td class="p-3">{{ d.descripcion }}</td>
+            <td class="p-3">{{ d.cantidad }}</td>
+            <td class="p-3">{{ d.precio_unitario }}</td>
+            <td class="p-3 font-semibold">{{ d.subtotal }}</td>
+            <td class="p-3 text-center">
+
+                <a href="{% url 'ventas:detalle_edit' d.pk %}"
+                   class="text-blue-700 hover:text-blue-900 mx-2">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+
+                <a href="{% url 'ventas:detalle_delete' d.pk %}"
+                   class="text-red-700 hover:text-red-900 mx-2"
+                   onclick="return confirm('¿Eliminar este ítem?');">
+                    <i class="bi bi-trash"></i>
+                </a>
+
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="p-4 text-center text-gray-500">
+                No hay ítems registrados.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

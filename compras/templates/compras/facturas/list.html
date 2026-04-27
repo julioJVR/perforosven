@@ -1,0 +1,46 @@
+{% extends 'compras/base_compras.html' %}
+{% block title %}Facturación{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <h1 class="text-2xl font-bold mb-6">Facturación</h1>
+
+    <a href="{% url 'compras:crear_factura' %}" class="bg-purple-600 text-white px-4 py-2 rounded mb-4 inline-block">+ Nueva Factura</a>
+
+    <div class="bg-white rounded shadow overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-3 text-left">#</th>
+                    <th class="p-3 text-left">Proveedor</th>
+                    <th class="p-3 text-left">N° Factura</th>
+                    <th class="p-3 text-left">Fecha</th>
+                    <th class="p-3 text-left">Moneda</th>
+                    <th class="p-3 text-right">Total</th>
+                    <th class="p-3 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in facturas %}
+                <tr class="border-t">
+                    <td class="p-3">{{ forloop.counter }}</td>
+                    <td class="p-3">{{ f.proveedor.nombre_empresa }}</td>
+                    <td class="p-3">{{ f.numero_factura }}</td>
+                    <td class="p-3">{{ f.fecha_factura }}</td>
+                    <td class="p-3">{{ f.get_moneda_display }}</td>
+                    <td class="p-3 text-right">{{ f.total_factura|floatformat:2 }}</td>
+                    <td class="p-3 text-center">
+                        <a href="{% url 'compras:editar_factura' f.pk %}" class="text-blue-600 mr-2">Editar</a>
+                        <a href="{% url 'compras:eliminar_factura' f.pk %}" class="text-red-600">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="p-4 text-center text-gray-600">No hay facturas registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Órdenes de Compra – SIAC Perforosven{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800">Órdenes de Compra</h2>
+        <a href="{% url 'orden_create' %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+            ➕ Nueva Orden
+        </a>
+    </div>
+
+    <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+        <thead class="bg-indigo-800 text-white">
+            <tr>
+                <th class="py-3 px-4 text-left">N° Orden</th>
+                <th class="py-3 px-4 text-left">Proveedor</th>
+                <th class="py-3 px-4 text-left">Fecha</th>
+                <th class="py-3 px-4 text-right">Total</th>
+                <th class="py-3 px-4 text-center">Estado</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for orden in ordenes %}
+            <tr class="hover:bg-gray-100">
+                <td class="py-3 px-4">{{ orden.numero_orden }}</td>
+                <td class="py-3 px-4">{{ orden.proveedor.nombre }}</td>
+                <td class="py-3 px-4">{{ orden.fecha|date:"d/m/Y" }}</td>
+                <td class="py-3 px-4 text-right">{{ orden.total|floatformat:2 }}</td>
+                <td class="py-3 px-4 text-center">
+                    {% if orden.estado == 'P' %}
+                        <span class="text-yellow-600 font-semibold">Pendiente</span>
+                    {% elif orden.estado == 'A' %}
+                        <span class="text-green-600 font-semibold">Aprobada</span>
+                    {% else %}
+                        <span class="text-gray-500">N/A</span>
+                    {% endif %}
+                </td>
+                <td class="py-3 px-4 text-center space-x-2">
+                    <a href="{% url 'orden_detalle' orden.id %}" class="text-blue-600 hover:underline">🔍 Ver</a>
+                    <a href="{% url 'orden_update' orden.id %}" class="text-yellow-600 hover:underline">✏️ Editar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="py-4 text-center text-gray-500">No hay órdenes registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

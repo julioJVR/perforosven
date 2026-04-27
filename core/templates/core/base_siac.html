@@ -1,0 +1,314 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SIAC Perforosven{% endblock %}</title>
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Tailwind (CDN para desarrollo, en producción compila tu output.css) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Pequeños ajustes locales */
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 0.5rem; }
+        .sidebar-link:hover { background-color: rgba(255,255,255,0.06); }
+        .submenu { display: none; margin-left: 0.5rem; }
+        .submenu a { padding-left: 1.75rem; display: block; }
+        /* Resaltar el item activo */
+        .sidebar-active { background-color: rgba(255,255,255,0.08); }
+    </style>
+
+    <script>
+        function toggleMenu(id) {
+            const menu = document.getElementById(id);
+            if (!menu) return;
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Marcar menú activo si la URL contiene /contabilidad/ (simple ayuda visual)
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const path = window.location.pathname || '';
+
+                // CONTABILIDAD
+                if (path.startsWith('/contabilidad')) {
+                    const btn = document.getElementById('btn-submenu-contabilidad');
+                    const sub = document.getElementById('submenu-contabilidad');
+                    if (btn) btn.classList.add('sidebar-active');
+                    if (sub) sub.style.display = 'block';
+                }
+
+                // COMPRAS
+                if (path.startsWith('/compras')) {
+                    const btn = document.getElementById('btn-submenu-compras');
+                    const sub = document.getElementById('submenu-compras');
+                    if (btn) btn.classList.add('sidebar-active');
+                    if (sub) sub.style.display = 'block';
+                }
+
+                // VENTAS
+                if (path.startsWith('/ventas')) {
+                    const btn = document.getElementById('btn-submenu-ventas');
+                    const sub = document.getElementById('submenu-ventas');
+                    if (btn) btn.classList.add('sidebar-active');
+                    if (sub) sub.style.display = 'block';
+                }
+
+            } catch (e) {}
+        });
+    </script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img src="{% static 'img/logo_perforosven.jpg' %}" alt="Logo" class="h-10 rounded-sm">
+                <h1 class="text-2xl font-semibold">SIAC Perforosven</h1>
+            </div>
+            <div class="text-sm opacity-80 tracking-wide">Sistema Integrado de Administración y Contabilidad</div>
+        </div>
+    </header>
+
+    <div class="flex flex-1">
+        <!-- SIDEBAR -->
+        <aside class="w-64 bg-blue-900 text-white p-5 shadow-lg">
+            <nav class="space-y-3">
+                <ul>
+
+                    <li>
+                        <a href="{% url 'core:inicio' %}" class="sidebar-link rounded hover:bg-blue-700">
+                            <i class="bi bi-house-door-fill text-lg"></i>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+
+                    <li><hr class="border-blue-800 my-2"></li>
+
+                    <li>
+                        <button id="btn-submenu-compras" onclick="toggleMenu('submenu-compras')" 
+                                class="sidebar-link w-full text-left rounded hover:bg-blue-700">
+                            <i class="bi bi-cart-fill text-lg"></i>
+                            <span>Compras</span>
+                            <i class="bi bi-chevron-down ml-auto"></i>
+                        </button>
+
+                        <ul id="submenu-compras" class="submenu mt-2 space-y-1">
+                            <li>
+                                <a href="{% url 'compras:dashboard_compras' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Panel</span>
+                                </a>
+                            </li>
+
+                            <!-- Agregar más según tu proyecto -->
+
+                            <li>
+                                <a href="{% url 'compras:lista_proveedores' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-truck"></i>
+                                    <span>Proveedores</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'compras:lista_productos' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-box-seam"></i>
+                                    <span>Productos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'compras:lista_ordenes' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Órdenes de Compra</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'compras:lista_facturas' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-clipboard-check"></i>
+                                    <span>Facturas</span>
+                                </a>
+                            </li>
+                                                                                    
+                        </ul>
+                    </li>
+
+                    <li>
+                        <button id="btn-submenu-ventas" onclick="toggleMenu('submenu-ventas')" 
+                                class="sidebar-link w-full text-left rounded hover:bg-blue-700">
+                            <i class="bi bi-cash-coin text-lg"></i>
+                            <span>Ventas</span>
+                            <i class="bi bi-chevron-down ml-auto"></i>
+                        </button>
+
+                        <ul id="submenu-ventas" class="submenu mt-2 space-y-1">
+
+                            <li>
+                                <a href="{% url 'ventas:dashboard' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Panel</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'ventas:clientes' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Clientes</span>
+                                </a>
+                            </li>
+
+                            <!-- Futuro -->
+                            <li>
+                                <a href="{% url 'ventas:contratos' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Contratos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'ventas:cotizaciones' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-cart4"></i>
+                                    <span>Pedidos / Proformas</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="sidebar-link rounded opacity-50 cursor-not-allowed">
+                                    <i class="bi bi-receipt"></i>
+                                    <span>Facturación</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <!-- Contabilidad: botón desplegable -->
+                    <li>
+                        <button id="btn-submenu-contabilidad" onclick="toggleMenu('submenu-contabilidad')" 
+                                class="sidebar-link w-full text-left rounded hover:bg-blue-700">
+                            <i class="bi bi-clipboard-data text-lg"></i>
+                            <span>Contabilidad</span>
+                            <i class="bi bi-chevron-down ml-auto"></i>
+                        </button>
+
+                        <ul id="submenu-contabilidad" class="submenu mt-2 space-y-1">
+                            <li>
+                                <a href="{% url 'contabilidad:dashboard_contabilidad' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Panel</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'contabilidad:cuentas_list' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-journal-text"></i>
+                                    <span>Plan de Cuentas</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'contabilidad:asientos_list' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-list-check"></i>
+                                    <span>Asientos Contables</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'contabilidad:menu_reportes' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-graph-up"></i>
+                                    <span>Reportes NIIF</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'contabilidad:importar_plan' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-upload"></i>
+                                    <span>Importar Plan</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+
+                    <!-- Otros (desactivados visualmente si no implementados) -->
+                    
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-bank2 text-lg"></i>
+                            <span>Tesorería</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-shield-check text-lg"></i>
+                            <span>Tributos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-calculator-fill text-lg"></i>
+                            <span>Presupuesto</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-building-check text-lg"></i>
+                            <span>Almacen</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-people-fill text-lg"></i>
+                            <span>Recursos Humanos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-gear-fill text-lg"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
+                            <i class="bi bi-question-circle-fill text-lg"></i>
+                            <span>Ayuda</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="flex-1 p-8">
+            {% block content %}
+            <!-- Contenido por defecto (si no hay override) -->
+            <div class="max-w-6xl mx-auto text-center py-12">
+                <h2 class="text-3xl font-semibold text-blue-900">Bienvenido a SIAC Perforosven</h2>
+                <p class="text-gray-600 mt-4">Seleccione un módulo para comenzar.</p>
+            </div>
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-blue-900 text-white py-3 text-center text-sm">
+        © 2025 SIAC Perforosven — Sistema Integrado de Administración y Contabilidad
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends 'compras/base_compras.html' %}
+{% block title %}{{ accion }} – Proveedores{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">{{ accion }}</h2>
+
+<form method="post" class="bg-white p-6 rounded-xl shadow w-full md:w-3/4">
+    {% csrf_token %}
+
+    <!-- 🔹 DATOS GENERALES -->
+    <h3 class="text-lg font-semibold mb-2 text-blue-700 border-b pb-1">Datos Generales</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        {{ form.rif.label_tag }} {{ form.rif }}
+        {{ form.nombre_empresa.label_tag }} {{ form.nombre_empresa }}
+        {{ form.direccion.label_tag }} {{ form.direccion }}
+        {{ form.telefono.label_tag }} {{ form.telefono }}
+        {{ form.correo.label_tag }} {{ form.correo }}
+        <div class="flex items-center space-x-2">
+            {{ form.activo }} {{ form.activo.label_tag }}
+        </div>
+    </div>
+
+    <!-- 🔹 REPRESENTANTE LEGAL -->
+    <h3 class="text-lg font-semibold mt-6 mb-2 text-blue-700 border-b pb-1">Representante Legal</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        {{ form.representante_nombre.label_tag }} {{ form.representante_nombre }}
+        {{ form.representante_cedula.label_tag }} {{ form.representante_cedula }}
+        {{ form.representante_telefono.label_tag }} {{ form.representante_telefono }}
+        {{ form.representante_correo.label_tag }} {{ form.representante_correo }}
+    </div>
+
+    <!-- 🔹 DATOS BANCARIOS NACIONALES -->
+    <h3 class="text-lg font-semibold mt-6 mb-2 text-blue-700 border-b pb-1">Datos Bancarios Nacionales</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        {{ form.banco_nacional.label_tag }} {{ form.banco_nacional }}
+        {{ form.cuenta_nacional.label_tag }} {{ form.cuenta_nacional }}
+        {{ form.tipo_cuenta_nacional.label_tag }} {{ form.tipo_cuenta_nacional }}
+    </div>
+
+    <!-- 🔹 DATOS BANCARIOS EXTRANJEROS -->
+    <h3 class="text-lg font-semibold mt-6 mb-2 text-blue-700 border-b pb-1">Datos Bancarios Extranjeros</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        {{ form.banco_extranjero.label_tag }} {{ form.banco_extranjero }}
+        {{ form.cuenta_extranjera.label_tag }} {{ form.cuenta_extranjera }}
+        {{ form.swift.label_tag }} {{ form.swift }}
+    </div>
+
+    <!-- 🔹 BOTONES -->
+    <div class="mt-6 flex justify-end space-x-3">
+        <a href="{% url 'compras:lista_proveedores' %}" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
+            <i class="bi bi-arrow-left"></i> Cancelar
+        </a>
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
+            <i class="bi bi-save"></i> Guardar
+        </button>
+    </div>
+</form>
+{% endblock %}

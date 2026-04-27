@@ -1,0 +1,93 @@
+{% extends 'core/base_siac.html' %}
+{% load static %}
+
+{% block title %}Ventas | SIAC Perforosven{% endblock %}
+
+{% block content %}
+
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Título -->
+        <h2 class="text-3xl font-semibold text-center text-blue-900 mb-10">
+            Panel de Ventas
+        </h2>
+
+            
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Clientes -->
+            <a href="{% url 'ventas:clientes' %}" 
+            class="bg-white shadow hover:shadow-lg rounded-xl p-6 text-center transition">
+                <i class="bi bi-people-fill text-4xl text-blue-700 mb-3"></i>
+                <h4 class="text-lg font-semibold mb-2">Clientes</h4>
+                <p class="text-gray-500 text-sm">Registro, consulta y edición.</p>
+            </a>
+
+            <!-- Contratos -->
+            <a href="{% url 'ventas:contratos' %}" 
+            class="bg-white shadow hover:shadow-lg rounded-xl p-6 text-center transition">
+                <i class="bi bi-file-earmark-check text-4xl text-blue-700 mb-3"></i>
+                <h4 class="text-lg font-semibold mb-2">Contratos</h4>
+                <p class="text-gray-500 text-sm">Gestión de contratos con clientes.</p>
+            </a>
+
+            <!-- Cotizaciones -->
+            <a href="{% url 'ventas:cotizaciones' %}" 
+            class="bg-white shadow hover:shadow-lg rounded-xl p-6 text-center transition">
+                <i class="bi bi-journal-text text-4xl text-blue-700 mb-3"></i>
+                <h4 class="text-lg font-semibold mb-2">Proformas-Cotizaciones</h4>
+                <p class="text-gray-500 text-sm">Crear y gestionar proformas/prefacturas.</p>
+            </a>
+
+            <!-- Facturas -->
+            <a href="#" 
+            class="bg-white shadow hover:shadow-lg rounded-xl p-6 text-center transition">
+                <i class="bi bi-receipt text-4xl text-blue-700 mb-3"></i>
+                <h4 class="text-lg font-semibold mb-2">Facturas</h4>
+                <p class="text-gray-500 text-sm">Emisión, consulta y reportes.</p>
+            </a>
+
+            <!-- Retenciones -->
+            <a href="#" 
+            class="bg-white shadow hover:shadow-lg rounded-xl p-6 text-center transition">
+                <i class="bi bi-cash text-4xl text-blue-700 mb-3"></i>
+                <h4 class="text-lg font-semibold mb-2">Retenciones</h4>
+                <p class="text-gray-500 text-sm">Gestión de retenciones.</p>
+            </a>
+
+        </div>
+        <hr class="my-5">
+
+        <!-- Accesos directos -->
+        <h3 class="text-xl font-semibold text-blue-900 mb-6">Accesos Directos</h3>
+        <!-- KPIs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            
+            <div class="bg-white shadow rounded-xl p-6 text-center">
+                <i class="bi bi-people text-4xl text-blue-700 mb-3"></i>
+                <p class="text-gray-500 text-sm">Clientes Registrados</p>
+                <p class="text-3xl font-bold text-blue-900">{{ total_clientes|default:0 }}</p>
+            </div>
+
+            <div class="bg-white shadow rounded-xl p-6 text-center">
+                <i class="bi bi-file-earmark-text text-4xl text-blue-700 mb-3"></i>
+                <p class="text-gray-500 text-sm">Cotizaciones</p>
+                <p class="text-3xl font-bold text-blue-900">{{ total_cotizaciones|default:0 }}</p>
+            </div>
+
+            <div class="bg-white shadow rounded-xl p-6 text-center">
+                <i class="bi bi-receipt text-4xl text-blue-700 mb-3"></i>
+                <p class="text-gray-500 text-sm">Facturas Emitidas</p>
+                <p class="text-3xl font-bold text-blue-900">{{ total_facturas|default:0 }}</p>
+            </div>
+
+            <div class="bg-white shadow rounded-xl p-6 text-center">
+                <i class="bi bi-cash-stack text-4xl text-blue-700 mb-3"></i>
+                <p class="text-gray-500 text-sm">Retenciones Procesadas</p>
+                <p class="text-3xl font-bold text-blue-900">{{ total_retenciones|default:0 }}</p>
+            </div>
+
+        </div>
+
+{% endblock %}

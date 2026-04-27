@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="flex justify-between mb-4">
+    <h1 class="text-2xl font-bold">Contratos</h1>
+    <a href="{% url 'ventas:contrato_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded">
+        Nuevo Contrato
+    </a>
+</div>
+
+<div class="bg-white shadow rounded p-4">
+    <table class="w-full table-auto">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Cliente</th>
+                <th>Monto</th>
+                <th>Vigencia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in contratos %}
+            <tr class="border-b">
+                <td>{{ c.numero }}</td>
+                <td>{{ c.cliente.nombre }}</td>
+                <td>{{ c.monto_total }}</td>
+                <td>{{ c.fecha_inicio }} - {{ c.fecha_fin }}</td>
+                <td class="text-right">
+                    <a href="{% url 'ventas:contrato_edit' c.pk %}" class="text-blue-600">Editar</a>
+                    <a href="{% url 'ventas:contrato_delete' c.pk %}" class="text-red-600 ml-3">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center">No hay contratos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

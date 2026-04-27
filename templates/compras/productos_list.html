@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Productos – SIAC Perforosven{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800">Listado de Productos</h2>
+        <a href="{% url 'producto_create' %}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            ➕ Nuevo Producto
+        </a>
+    </div>
+
+    <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+        <thead class="bg-green-800 text-white">
+            <tr>
+                <th class="py-3 px-4 text-left">Código</th>
+                <th class="py-3 px-4 text-left">Descripción</th>
+                <th class="py-3 px-4 text-left">Categoría</th>
+                <th class="py-3 px-4 text-right">Precio</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for producto in productos %}
+            <tr class="hover:bg-gray-100">
+                <td class="py-3 px-4">{{ producto.codigo }}</td>
+                <td class="py-3 px-4">{{ producto.descripcion }}</td>
+                <td class="py-3 px-4">{{ producto.categoria }}</td>
+                <td class="py-3 px-4 text-right">{{ producto.precio|floatformat:2 }}</td>
+                <td class="py-3 px-4 text-center space-x-2">
+                    <a href="{% url 'producto_update' producto.id %}" class="text-blue-600 hover:underline">✏️</a>
+                    <a href="{% url 'producto_delete' producto.id %}" class="text-red-600 hover:underline">🗑️</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="py-4 text-center text-gray-500">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

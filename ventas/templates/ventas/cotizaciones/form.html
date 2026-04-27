@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-4">
+    {% if editar %} Editar Cotización {% else %} Nueva Cotización {% endif %}
+</h1>
+
+<form method="POST" x-data="cotizacionForm()">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-2 gap-4 bg-white p-4 rounded shadow mb-6">
+        {{ form.as_p }}
+    </div>
+
+    <!-- DETALLES -->
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-3">Detalles</h2>
+
+        <table class="w-full" id="tablaDetalles">
+            <thead>
+                <tr>
+                    <th>Partida</th>
+                    <th>Descripción</th>
+                    <th>Cant.</th>
+                    <th>P.Unit</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{ formset.management_form }}
+
+                {% for f in formset %}
+                <tr>
+                    <td>{{ f.partida_contrato }}</td>
+                    <td>{{ f.descripcion }}</td>
+                    <td>{{ f.cantidad }}</td>
+                    <td>{{ f.precio_unitario }}</td>
+                    <td class="subtotal text-right font-bold"></td>
+                    <td>{{ f.DELETE }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="button"
+                class="mt-4 bg-green-600 text-white px-3 py-2 rounded"
+                @click="addDetalle">
+            + Agregar Detalle
+        </button>
+
+        <div class="text-right mt-4">
+            <span class="font-bold text-xl">Total: </span>
+            <span class="font-bold text-xl" x-text="total"></span>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <button class="bg-blue-700 text-white px-4 py-2 rounded">Guardar</button>
+    </div>
+</form>
+
+<script>
+function cotizacionForm() {
+    return {
+        totalForms: Number(document.querySelector("#id_detallecotizacion_set-TOTAL_FORMS").value),
+        total: 0,
+
+        addDetalle() {
+            let tbody = document.querySelector("#tablaDetalles tbody");
+
+            let newRow = `
+            <tr>
+                <td><select name="detallecotizacion_set-${this.totalForms}-partida_contrato" class="border p-1 w-full"></select></td>
+                <td><input type="text" name="detallecotizacion_set-${this.totalForms}-descripcion" class="border p-1 w-full"></td>
+                <td><input type="number" step="0.01" name="detallecotizacion_set-${this.totalForms}-cantidad" class="cantidad border p-1 w-full"></td>
+                <td><input type="number" step="0.01" name="detallecotizacion_set-${this.totalForms}-precio_unitario" class="precio border p-1 w-full"></td>
+                <td class="subtotal text-right"></td>
+                <td><input type="checkbox" name="detallecotizacion_set-${this.totalForms}-DELETE"></td>
+            </tr>`;
+
+            tbody.insertAdjacentHTML("beforeend", newRow);
+            document.querySelector("#id_detallecotizacion_set-TOTAL_FORMS").value = ++this.totalForms;
+        }
+    }
+}
+</script>
+
+{% endblock %}

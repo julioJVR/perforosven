@@ -1,0 +1,103 @@
+{% extends 'compras/base_compras.html' %}
+{% load static %}
+
+{% block title %}Detalle de Orden de Compra | SIAC Perforosven{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold text-blue-800 mb-6">
+    Detalle de la Orden de Compra N° {{ orden.numero_orden }}
+</h2>
+
+<!-- 🔹 Encabezado de la orden -->
+<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <p><strong>Proveedor:</strong> {{ orden.proveedor.nombre_empresa }}</p>
+            <p><strong>RIF:</strong> {{ orden.proveedor.rif }}</p>
+            <p><strong>Teléfono:</strong> {{ orden.proveedor.telefono }}</p>
+            <p><strong>Correo:</strong> {{ orden.proveedor.correo }}</p>
+        </div>
+        <div>
+            <p><strong>Fecha:</strong> {{ orden.fecha|date:"d/m/Y" }}</p>
+            <p><strong>Estado:</strong>
+                <span class="px-3 py-1 rounded text-white
+                    {% if orden.estado == 'APROBADA' %}bg-green-600
+                    {% elif orden.estado == 'PENDIENTE' %}bg-yellow-500
+                    {% else %}bg-gray-500{% endif %}">
+                    {{ orden.estado }}
+                </span>
+            </p>
+            <p><strong>Observaciones:</strong> {{ orden.observaciones|default:"-" }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- 🔹 Tabla de productos de la orden -->
+<div class="bg-white shadow-md rounded-lg overflow-x-auto mb-6">
+    <table class="w-full text-sm text-left border-collapse">
+        <thead class="bg-blue-900 text-white">
+            <tr>
+                <th class="px-4 py-3">Producto</th>
+                <th class="px-4 py-3 text-center">Cantidad</th>
+                <th class="px-4 py-3 text-right">Precio Unitario (Bs.)</th>
+                <th class="px-4 py-3 text-right">Subtotal (Bs.)</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for detalle in detalles %}
+                <tr class="hover:bg-gray-100">
+                    <td class="px-4 py-3">{{ detalle.producto.nombre }}</td>
+                    <td class="px-4 py-3 text-center">{{ detalle.cantidad }}</td>
+                    <td class="px-4 py-3 text-right">{{ detalle.precio_unitario|floatformat:2 }}</td>
+                    <td class="px-4 py-3 text-right">{{ detalle.subtotal|floatformat:2 }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-6 text-gray-500">
+                        No hay productos asociados a esta orden.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% if detalles %}
+        <tfoot class="bg-gray-100 font-semibold">
+            <tr>
+                <td colspan="3" class="px-4 py-3 text-right">Subtotal:</td>
+                <td class="px-4 py-3 text-right">{{ orden.subtotal|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="px-4 py-3 text-right">IVA (16%):</td>
+                <td class="px-4 py-3 text-right">{{ orden.iva|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="px-4 py-3 text-right">Total a Pagar:</td>
+                <td class="px-4 py-3 text-right text-blue-800">{{ orden.monto_total|floatformat:2 }}</td>
+            </tr>
+        </tfoot>
+        {% endif %}
+    </table>
+</div>
+
+<!-- 🔹 Botones de acción -->
+<div class="flex flex-wrap gap-3">
+    <a href="{% url 'compras:lista_ordenes' %}" class="bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600 transition">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+    <a href="{% url 'compras:editar_orden' orden.id %}" class="bg-blue-700 text-white px-5 py-2 rounded hover:bg-blue-800 transition">
+        <i class="bi bi-pencil-square"></i> Editar
+    </a>
+    <a href="{% url 'compras:eliminar_orden' orden.id %}" class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition">
+        <i class="bi bi-trash"></i> Eliminar
+    </a>
+
+    <div class="flex-1"></div> <!-- separador flexible -->
+
+    <a href="{% url 'compras:imprimir_orden_pdf' orden.id %}" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
+        <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+    </a>
+    <a href="{% url 'compras:exportar_orden_excel' orden.id %}" class="bg-yellow-500 text-white px-5 py-2 rounded hover:bg-yellow-600 transition">
+        <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+    </a>
+</div>
+
+{% endblock %}

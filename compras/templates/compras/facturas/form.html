@@ -1,0 +1,207 @@
+{% extends 'compras/base_compras.html' %}
+{% load static %}
+{% block title %}{{ accion }} | Facturación{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <h1 class="text-2xl font-bold mb-6">{{ accion }}</h1>
+
+    <form method="post" id="facturaForm" class="bg-white rounded-xl p-6 shadow space-y-6">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-semibold mb-1">RIF del Proveedor</label>
+                {{ form.rif_proveedor }}
+                <p class="text-xs text-gray-500 mt-1">Escriba y presione fuera del campo para buscar.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Proveedor</label>
+                {{ form.proveedor }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Orden de Compra</label>
+                {{ form.orden_compra }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-semibold mb-1">Fecha de Factura</label>
+                {{ form.fecha_factura }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Moneda</label>
+                {{ form.moneda }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Tasa de Cambio</label>
+                {{ form.tasa_cambio }}
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">Descripción del Servicio</label>
+            {{ form.descripcion_servicio }}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold mb-1">Número de Factura</label>
+                {{ form.numero_factura }}
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-1">Número de Control</label>
+                {{ form.numero_control }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div>
+                <label class="block text-sm font-semibold mb-1">Monto Base</label>
+                {{ form.monto_base }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Aplica IVA</label>
+                <input type="checkbox" id="id_aplica_iva" name="aplica_iva" checked class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold mb-1">Total Factura</label>
+                <div id="display_total" class="p-2 border rounded bg-gray-50">0.00</div>
+                {{ form.total_factura }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <label class="block text-sm font-semibold mb-1">Municipio</label>
+                {{ form.municipio }}
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-1">Retención IVA (%)</label>
+                <input id="ret_iva_pct" name="ret_iva_pct" type="number" step="0.01" value="0" class="w-full border rounded p-2" />
+                {{ form.ret_iva }}
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-1">Retención ISLR (%)</label>
+                <input id="ret_islr_pct" name="ret_islr_pct" type="number" step="0.01" value="0" class="w-full border rounded p-2" />
+                {{ form.ret_islr }}
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-1">Retención Municipal (%)</label>
+                <input id="ret_mun_pct" name="ret_municipal_pct" type="number" step="0.01" value="0" class="w-full border rounded p-2" />
+                {{ form.porcentaje_ret_municipal }}
+                {{ form.ret_municipal }}
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">Soporte o Documento</label>
+            {{ form.soporte_documento }}
+        </div>
+
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'compras:lista_facturas' %}" class="px-4 py-2 bg-gray-200 rounded">Cancelar</a>
+            <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded">Guardar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const rifInput = document.querySelector('input[name="rif_proveedor"]');
+    const proveedorSelect = document.querySelector('select[name="proveedor"]');
+    const montoBaseInput = document.querySelector('input[name="monto_base"]');
+    const tasaInput = document.querySelector('input[name="tasa_cambio"]');
+    const monedaSelect = document.querySelector('select[name="moneda"]');
+    const aplicaIvaCheckbox = document.querySelector('#id_aplica_iva');
+    const displayTotal = document.getElementById('display_total');
+
+    const ivaHidden = document.querySelector('input[name="iva"]');
+    const totalHidden = document.querySelector('input[name="total_factura"]');
+    const retIvaHidden = document.querySelector('input[name="ret_iva"]');
+    const retIslrHidden = document.querySelector('input[name="ret_islr"]');
+    const retMunHiddenPct = document.querySelector('input[name="porcentaje_ret_municipal"]') || document.querySelector('input[name="ret_municipal_pct"]');
+    const retMunHidden = document.querySelector('input[name="ret_municipal"]');
+
+    const retIvaPct = document.getElementById('ret_iva_pct');
+    const retIslrPct = document.getElementById('ret_islr_pct');
+    const retMunPct = document.getElementById('ret_mun_pct');
+
+    function fmt(n) {
+        return Number(n || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    if (rifInput) {
+        rifInput.addEventListener('blur', function () {
+            const rif = rifInput.value.trim();
+            if (!rif) return;
+            fetch(`/compras/buscar-proveedor/?rif=${encodeURIComponent(rif)}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.id) {
+                        const opt = Array.from(proveedorSelect.options).find(o => o.value == String(data.id));
+                        if (opt) {
+                            proveedorSelect.value = data.id;
+                        } else {
+                            const newOpt = new Option(data.nombre_empresa, data.id, true, true);
+                            proveedorSelect.appendChild(newOpt);
+                            proveedorSelect.value = data.id;
+                        }
+                        rifInput.classList.remove('border-red-500');
+                    } else {
+                        alert('No se encontró proveedor para el RIF ingresado.');
+                        rifInput.classList.add('border-red-500');
+                    }
+                })
+                .catch(err => {
+                    console.error('error buscar proveedor', err);
+                });
+        });
+    }
+
+    function recalcular() {
+        let monto = parseFloat((montoBaseInput && montoBaseInput.value) || 0);
+        let tasa = parseFloat((tasaInput && tasaInput.value) || 1);
+        let moneda = (monedaSelect && monedaSelect.value) || 'VES';
+        const aplicaIva = aplicaIvaCheckbox && aplicaIvaCheckbox.checked;
+
+        let base_en_bs = (moneda === 'USD') ? (monto * tasa) : monto;
+        base_en_bs = Number(base_en_bs || 0);
+
+        let iva = aplicaIva ? (base_en_bs * 0.16) : 0;
+        let total = base_en_bs + iva;
+
+        const rivaPct = parseFloat(retIvaPct.value || 0) / 100;
+        const rislrPct = parseFloat(retIslrPct.value || 0) / 100;
+        const rmunPct = parseFloat(retMunPct.value || 0) / 100;
+
+        const retiva = base_en_bs * rivaPct;
+        const retislr = base_en_bs * rislrPct;
+        const retmun = base_en_bs * rmunPct;
+
+        displayTotal.textContent = fmt(total);
+        if (ivaHidden) ivaHidden.value = iva.toFixed(2);
+        if (totalHidden) totalHidden.value = total.toFixed(2);
+        if (retIvaHidden) retIvaHidden.value = retiva.toFixed(2);
+        if (retIslrHidden) retIslrHidden.value = retislr.toFixed(2);
+        if (retMunHidden) retMunHidden.value = retmun.toFixed(2);
+        if (retMunHiddenPct) retMunHiddenPct.value = (parseFloat(retMunPct.value || 0)).toFixed(2);
+    }
+
+    [montoBaseInput, tasaInput, monedaSelect, aplicaIvaCheckbox, retIvaPct, retIslrPct, retMunPct].forEach(el => {
+        if (!el) return;
+        el.addEventListener('input', recalcular);
+        el.addEventListener('change', recalcular);
+    });
+
+    recalcular();
+});
+</script>
+{% endblock %}

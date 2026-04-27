@@ -1,0 +1,44 @@
+{% extends "compras/base_compras.html" %}
+{% block title %}Listado de Productos{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-green-800">Productos Registrados</h2>
+        <a href="{% url 'compras:nuevo_producto' %}" 
+           class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg shadow">
+           + Nuevo Producto
+        </a>
+    </div>
+
+    {% if productos %}
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-700 uppercase text-sm">
+                    <th class="p-2">Código</th>
+                    <th class="p-2">Descripción</th>
+                    <th class="p-2">Unidad</th>
+                    <th class="p-2 text-right">Precio Unitario</th>
+                    <th class="p-2 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in productos %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-2">{{ p.codigo }}</td>
+                    <td class="p-2">{{ p.descripcion }}</td>
+                    <td class="p-2">{{ p.unidad_medida }}</td>
+                    <td class="p-2 text-right">{{ p.precio_unitario|floatformat:2 }}</td>
+                    <td class="p-2 text-center">
+                        <a href="{% url 'compras:producto_update' p.id %}" class="text-blue-600 hover:underline">Editar</a> |
+                        <a href="{% url 'compras:producto_delete' p.id %}" class="text-red-600 hover:underline">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-gray-600">No hay productos registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}

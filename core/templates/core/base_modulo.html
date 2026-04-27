@@ -1,0 +1,18 @@
+{% extends 'core/base_siac.html' %}
+{% load static %}
+
+{% block title %}Módulo | SIAC Perforosven{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-semibold text-blue-800">{{ titulo_modulo }}</h2>
+    <p class="text-gray-600">{{ descripcion_modulo }}</p>
+</div>
+
+<!-- 🔹 Contenido principal de cada módulo -->
+<div class="bg-white rounded-lg shadow p-6">
+    {% block modulo_content %}
+    <!-- Aquí se insertará el contenido de cada módulo -->
+    {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Eliminar Cuenta{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-red-700 mb-6">
+    Eliminar Cuenta
+</h1>
+
+<div class="bg-white p-4 rounded shadow mb-6">
+    <p>¿Está seguro de eliminar la cuenta?</p>
+
+    <p class="mt-4 font-semibold">{{ objeto.codigo }} - {{ objeto.nombre }}</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="flex justify-end gap-4">
+        <a href="{% url 'contabilidad:cuentas_list' %}"
+           class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+            Cancelar
+        </a>
+
+        <button class="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700">
+            Eliminar
+        </button>
+    </div>
+</form>
+{% endblock %}

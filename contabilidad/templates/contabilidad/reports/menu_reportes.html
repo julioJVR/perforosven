@@ -1,0 +1,68 @@
+{% extends "core/base_siac.html" %}
+{% block title %}Reportes Contables{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800">Reportes Contables</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- BALANCE GENERAL -->
+        <a href="{% url 'contabilidad:balance_general' %}"
+           class="block bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-blue-600"><i class="bi bi-graph-up"></i>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 3h18v18H3z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-medium text-gray-800 mb-2">Balance General</h2>
+            <p class="text-sm text-gray-500">Informe de activos, pasivos y patrimonio.</p>
+        </a>
+
+        <!-- ESTADO DE RESULTADOS -->
+        <a href="{% url 'contabilidad:estado_resultados' %}"
+           class="block bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-green-600"><i class="bi bi-file-earmark-bar-graph"></i>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 3h18v18H3z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-medium text-gray-800 mb-2">Estado de Resultados</h2>
+            <p class="text-sm text-gray-500">Ingresos, gastos y utilidad neta.</p>
+        </a>
+
+        <!-- PYG ANALITICO -->
+        <a href="{% url 'contabilidad:pl_analitico' %}"
+           class="block bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-purple-600"><i class="bi bi-graph-up-arrow"></i>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 3h18v18H3z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-medium text-gray-800 mb-2">Pérdidas y Ganancias Analítico</h2>
+            <p class="text-sm text-gray-500">Detalle por cuentas e indicadores.</p>
+        </a>
+
+        <!-- FLUJO DE EFECTIVO -->
+        <a href="{% url 'contabilidad:flujo_efectivo' %}"
+           class="block bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-indigo-600"><i class="bi bi-bank"></i>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 3h18v18H3z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-medium text-gray-800 mb-2">Flujo de Efectivo</h2>
+            <p class="text-sm text-gray-500">Entradas y salidas de efectivo.</p>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

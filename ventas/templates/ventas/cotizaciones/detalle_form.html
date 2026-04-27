@@ -1,0 +1,42 @@
+{% extends "core/base_siac.html" %}
+{% load static %}
+
+{% block title %}Ítem de Cotización{% endblock %}
+
+{% block content %}
+
+<h2 class="text-2xl font-semibold text-blue-900 mb-6">
+    Ítem de Cotización {{ cotizacion.numero }}
+</h2>
+
+<div class="bg-white shadow rounded-lg p-6 max-w-xl">
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Descripción</label>
+            {{ form.descripcion }}
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Cantidad</label>
+            {{ form.cantidad }}
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Precio Unitario</label>
+            {{ form.precio_unitario }}
+        </div>
+
+        <div class="flex justify-end mt-6">
+            <button type="submit"
+                    class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded">
+                Guardar
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

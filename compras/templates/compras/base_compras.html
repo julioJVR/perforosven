@@ -1,0 +1,86 @@
+{% extends 'core/base_modulo.html' %}
+{% load static %}
+
+{% block title %}Módulo Compras | SIAC Perforosven{% endblock %}
+
+{% block modulo_content %}
+<div class="flex min-h-screen">
+
+    <!-- 🔹 Barra lateral -->
+    <aside class="w-64 bg-blue-900 text-white p-5 shadow-lg">
+        <nav>
+            <ul class="space-y-3">
+                <li>
+                    <a href="{% url 'compras:dashboard_compras' %}" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 flex items-center gap-2">
+                        <i class="bi bi-house-door-fill"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'compras:dashboard_compras' %}" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 flex items-center gap-2">
+                        <i class="bi bi-speedometer2"></i> Panel Compras
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'compras:lista_proveedores' %}" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 flex items-center gap-2">
+                        <i class="bi bi-truck"></i> Proveedores
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'compras:lista_facturas' %}" 
+                        class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 flex items-center gap-2">
+                        <i class="bi bi-receipt"></i> Facturación
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 opacity-70 cursor-not-allowed flex items-center gap-2">
+                        <i class="bi bi-cash-coin"></i> Ventas (Próx.)
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 opacity-70 cursor-not-allowed flex items-center gap-2">
+                        <i class="bi bi-journal-bookmark"></i> Contabilidad (Próx.)
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 opacity-70 cursor-not-allowed flex items-center gap-2">
+                        <i class="bi bi-bank2"></i> Tesorería (Próx.)
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-link py-2 px-3 rounded hover:bg-blue-700 opacity-70 cursor-not-allowed flex items-center gap-2">
+                        <i class="bi bi-people-fill"></i> RRHH (Próx.)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- 🔹 Contenido principal -->
+    <main class="flex-1 p-8 bg-gray-50">
+
+        <!-- Mensajes del sistema -->
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="p-3 mb-3 rounded text-white 
+                        {% if message.tags == 'success' %}bg-green-600
+                        {% elif message.tags == 'error' %}bg-red-600
+                        {% else %}bg-blue-600{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Contenido dinámico del módulo Compras -->
+        {% block content %}
+        <h2 class="text-xl font-semibold mb-4">Bienvenido al módulo de Compras</h2>
+        <p>Seleccione una opción del menú lateral.</p>
+        {% endblock %}
+
+    </main>
+</div>
+{% endblock %}

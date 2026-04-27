@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3 class="mb-4">
+        {% if form.instance.pk %}
+            Editar Contrato
+        {% else %}
+            Registrar Contrato
+        {% endif %}
+    </h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- ======= FORMULARIO DEL CONTRATO ======= -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                Datos del Contrato
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.cliente.label_tag }}
+                        {{ form.cliente }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.numero.label_tag }}
+                        {{ form.numero }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.monto.label_tag }}
+                        {{ form.monto }}
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        {{ form.fecha_inicio.label_tag }}
+                        {{ form.fecha_inicio }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.fecha_fin.label_tag }}
+                        {{ form.fecha_fin }}
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    {{ form.descripcion.label_tag }}
+                    {{ form.descripcion }}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======= PARTIDAS DEL CONTRATO ======= -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                Partidas del Contrato
+            </div>
+            <div class="card-body">
+
+                {{ formset.management_form }}
+
+                <table class="table table-bordered table-striped" id="tabla-partidas">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Monto Asignado</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for f in formset.forms %}
+                        <tr>
+                            <td>{{ f.nombre }}</td>
+                            <td>{{ f.descripcion }}</td>
+                            <td>{{ f.monto_asignado }}</td>
+                            <td>
+                                {% if f.instance.pk %}
+                                    {{ f.DELETE }}
+                                {% else %}
+                                    <button type="button" class="btn btn-danger btn-sm eliminar-fila">X</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success" id="btn-agregar-fila">
+                    + Agregar Partida
+                </button>
+
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary">Guardar</button>
+            <a href="{% url 'ventas:contratos_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+// ======= LÓGICA PARA AGREGAR FILAS DINÁMICAS =======
+document.addEventListener("DOMContentLoaded", function () {
+    const btnAgregar = document.getElementById("btn-agregar-fila");
+    const tabla = document.querySelector("#tabla-partidas tbody");
+
+    let totalForms = document.querySelector("#id_partidas-TOTAL_FORMS");
+
+    btnAgregar.addEventListener("click", function () {
+        let index = totalForms.value;
+
+        let nuevaFila = `
+            <tr>
+                <td><input type="text" name="partidas-${index}-nombre" class="form-control"></td>
+                <td><textarea name="partidas-${index}-descripcion" class="form-control"></textarea></td>
+                <td><input type="number" step="0.01" name="partidas-${index}-monto_asignado" class="form-control"></td>
+                <td><button type="button" class="btn btn-danger btn-sm eliminar-fila">X</button></td>
+            </tr>
+        `;
+
+        tabla.insertAdjacentHTML("beforeend", nuevaFila);
+
+        totalForms.value = parseInt(totalForms.value) + 1;
+    });
+
+    // Eliminar fila
+    tabla.addEventListener("click", function(e) {
+        if (e.target.classList.contains("eliminar-fila")) {
+            e.target.closest("tr").remove();
+        }
+    });
+});
+</script>
+
+{% endblock %}
