@@ -12,6 +12,19 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+# Inicializar environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# Leer archivo .env
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # ============================================================
 # 🔹 RUTAS PRINCIPALES
@@ -21,9 +34,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ============================================================
 # 🔹 CONFIGURACIÓN BÁSICA
 # ============================================================
-SECRET_KEY = 'django-insecure-th$kl$or#t73%n&v2dekg3m1r9$qkaejx(=q%%sry9wpzkvf)7'  # cámbiala en producción
-DEBUG = True
-ALLOWED_HOSTS = []  # agrega tu IP o dominio cuando despliegues
+SECRET_KEY = env('DJANGO_SECRET_KEY')  # cámbiala en producción
+DEBUG = env.bool('DJANGO_DEBUG', default=True)
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])  # agrega tu IP o dominio cuando despliegues
 
 # ============================================================
 # 🔹 APLICACIONES INSTALADAS
@@ -88,12 +101,12 @@ TEMPLATES = [
 # ============================================================
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'perforosven_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
