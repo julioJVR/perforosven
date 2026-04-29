@@ -37,7 +37,7 @@ def inicio(request):
         {
             "nombre": "Tributos",
             "descripcion": "Cálculo de impuestos, declaraciones y reportes fiscales.",
-            "icono": "bi-shield-check",
+            "icono": "bi-receipt",
             "url": "#",
             "color": "bg-red-700 hover:bg-red-800"
         },
@@ -55,5 +55,19 @@ def inicio(request):
             "url": "#",
             "color": "bg-red-700 hover:bg-red-800"
         },
+        {
+            "nombre": "Almacen",
+            "descripcion": "Requisiciones, materiales, entradas, salidas, reportes.",
+            "icono": "bi bi-shop-window",
+            "url": "#",
+            "color": "bg-red-700 hover:bg-red-800"
+        },
+        {
+            "nombre": "Configuracion",
+            "descripcion": "Usuarios, creacion, seguridad.",
+            "icono": "bi bi-gear",
+            "url": "#",
+            "color": "bg-red-700 hover:bg-red-800"
+        }
     ]
     return render(request, 'core/inicio.html', {'modulos': modulos})
