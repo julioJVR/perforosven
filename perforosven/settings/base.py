@@ -29,7 +29,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # ============================================================
 # 🔹 RUTAS PRINCIPALES
 # ============================================================
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent # ya definido arriba (se comento por error)
 
 # ============================================================
 # 🔹 CONFIGURACIÓN BÁSICA
