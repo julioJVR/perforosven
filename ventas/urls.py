@@ -1,5 +1,6 @@
 from django.urls import path
 from ventas.views.dashboard import dashboard
+from django.contrib.auth.decorators import login_required
 
 # CLIENTES
 from ventas.views.clientes import (

@@ -48,12 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'core',       # 🔹 Dashboard general
     'compras',    # 🔹 Módulo de compras
     'contabilidad', # 🔹 Módulo de contabilidad
     'ventas',    # 🔹 Módulo de ventas
-    'rest_framework',  # 🔹 DRF para APIs
+    'rest_framework',
+    'accounts',  # 🔹 DRF para APIs
 
 ]
 
@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.LoginRequiredMiddleware',  # ← NUEVO
 ]
 
 # ============================================================
@@ -148,5 +149,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ============================================================
 # 🔹 OPCIONAL: CONFIGURACIÓN DE LOGIN (para cuando agreguemos autenticación)
 # ============================================================
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'core:inicio' # Redirige aquí después de login
+LOGOUT_REDIRECT_URL = 'accounts:login' # Redirige aquí después de logout
+

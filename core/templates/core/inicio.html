@@ -8,21 +8,24 @@
     Panel de Módulos
 </h2>
 
+<div class="logout-container" style="position: fixed; top: 20px; right: 20px;">
+    <span>Bienvenido, {{ user.username }}</span>
+    <a href="{% url 'accounts:logout' %}" class="btn-logout" style="margin-left: 10px; padding: 8px 16px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 4px;">
+        Cerrar Sesión
+    </a>
+</div>
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     {% for modulo in modulos %}
-    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition">
-        <div class="text-center">
-            <i class="bi {{ modulo.icono }} text-5xl text-blue-700 mb-4"></i>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+        <div class="p-6 text-center">
+            <i class="bi {{ modulo.icono }} text-4xl text-blue-700 mb-3"></i>
             <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ modulo.nombre }}</h3>
-            <p class="text-gray-600 mb-4">{{ modulo.descripcion }}</p>
+            <p class="text-gray-500 text-sm mb-4">{{ modulo.descripcion }}</p>
             {% if modulo.url != "#" %}
-            <a href="{% url modulo.url %}" class="{{ modulo.color }} text-white px-5 py-2 rounded transition">
-                Ingresar
-            </a>
+                <a href="{% url modulo.url %}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">Ingresar</a>
             {% else %}
-            <button class="bg-gray-400 text-white px-5 py-2 rounded cursor-not-allowed">
-                Próximamente
-            </button>
+                <span class="inline-block bg-gray-300 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed text-sm">Próximamente</span>
             {% endif %}
         </div>
     </div>

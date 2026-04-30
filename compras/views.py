@@ -5,6 +5,7 @@ from django.contrib import messages
 from io import BytesIO
 from decimal import Decimal
 import logging
+from django.contrib.auth.decorators import login_required
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas

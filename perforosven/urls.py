@@ -4,6 +4,7 @@ from django.conf import settings  # <-- Importar settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),  # ← NUEVA
     path('', include(('core.urls', 'core'), namespace='core')),
     path('compras/', include(('compras.urls', 'compras'), namespace='compras')),
     path("contabilidad/", include("contabilidad.urls")),

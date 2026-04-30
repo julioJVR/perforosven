@@ -1,6 +1,8 @@
 from django import forms
 from .models.cliente import Cliente
 from .models.contrato import Contrato
+from django.contrib.auth.decorators import login_required
+
 
 class ClienteForm(forms.ModelForm):
     class Meta:

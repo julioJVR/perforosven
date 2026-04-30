@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from ventas.models import Cotizacion, DetalleCotizacion
 from ventas.forms import DetalleCotizacionForm
+from django.contrib.auth.decorators import login_required
 
 def detalles_cotizacion(request, cotizacion_id):
     cotizacion = get_object_or_404(Cotizacion, pk=cotizacion_id)

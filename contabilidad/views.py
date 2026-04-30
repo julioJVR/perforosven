@@ -10,6 +10,7 @@ from io import BytesIO
 from openpyxl import load_workbook
 from .forms import CuentaContableForm, AsientoContableForm, MovimientoContableForm
 from .models import CuentaContable, AsientoContable, MovimientoContable
+from django.contrib.auth.decorators import login_required
 
 # ---------------- DASHBOARD ----------------
 def dashboard_contabilidad(request):

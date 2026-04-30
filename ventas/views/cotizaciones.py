@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from ventas.models.cotizacion import Cotizacion
 from ventas.models.detalle_cotizacion import DetalleCotizacion
 from ventas.models import Contrato, PartidaContrato
+from django.contrib.auth.decorators import login_required
 
 from ventas.forms.cotizacion_form import (
     CotizacionForm,
