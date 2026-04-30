@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from ..models.cliente import Cliente
 from ..forms.cliente_form import ClienteForm
 from django.contrib.auth.decorators import login_required
+from core.decorators import module_required
+
+@module_required('ventas')
 
 def clientes_list(request):
     clientes = Cliente.objects.all().order_by('nombre')

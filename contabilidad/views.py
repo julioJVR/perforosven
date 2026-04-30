@@ -11,6 +11,9 @@ from openpyxl import load_workbook
 from .forms import CuentaContableForm, AsientoContableForm, MovimientoContableForm
 from .models import CuentaContable, AsientoContable, MovimientoContable
 from django.contrib.auth.decorators import login_required
+from core.decorators import module_required
+
+@module_required('contabilidad')
 
 # ---------------- DASHBOARD ----------------
 def dashboard_contabilidad(request):

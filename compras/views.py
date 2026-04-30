@@ -6,6 +6,7 @@ from io import BytesIO
 from decimal import Decimal
 import logging
 from django.contrib.auth.decorators import login_required
+from core.decorators import module_required
 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -13,6 +14,7 @@ from openpyxl import Workbook
 
 from .models import Proveedor, Producto, OrdenCompra, Factura
 from .forms import ProveedorForm, ProductoForm, OrdenCompraForm, FacturaForm
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +40,8 @@ def dashboard_compras(request):
 
 
 # ----------------- proveedores, productos, ordenes -----------------
+@login_required
+@module_required('compras')
 def lista_proveedores(request):
     q = request.GET.get('q', '')
     proveedores = Proveedor.objects.filter(nombre_empresa__icontains=q) if q else Proveedor.objects.all()

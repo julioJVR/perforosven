@@ -3,6 +3,9 @@ from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from core.decorators import module_required
+
+
 
 from ventas.models import Contrato, PartidaContrato
 from ventas.forms.contrato_form import (
@@ -10,6 +13,7 @@ from ventas.forms.contrato_form import (
     PartidaContratoFormSet
 )
 
+@module_required('ventas')
 
 def contratos_list(request):
     contratos = Contrato.objects.all().order_by("-id")
