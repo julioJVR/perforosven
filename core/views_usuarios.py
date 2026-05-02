@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.decorators import admin_required
 from django.db.models import Q
-from django.utils import timezone
+
+User = get_user_model()
 
 
 @login_required
@@ -13,10 +14,10 @@ def lista_usuarios(request):
     """Vista para listar todos los usuarios"""
     # Filtros
     search = request.GET.get('search', '')
-    grupo_filter = request.GET.get('grupo', '')
+    role_filter = request.GET.get('role', '')
     estado_filter = request.GET.get('estado', '')
     
-    usuarios = User.objects.all().prefetch_related('groups')
+    usuarios = User.objects.all()
     
     # Aplicar filtros
     if search:
@@ -24,34 +25,36 @@ def lista_usuarios(request):
             Q(username__icontains=search) |
             Q(first_name__icontains=search) |
             Q(last_name__icontains=search) |
-            Q(email__icontains=search)
+            Q(email__icontains=search) |
+            Q(cargo__icontains=search) |
+            Q(departamento__icontains=search)
         )
     
-    if grupo_filter:
-        usuarios = usuarios.filter(groups__name=grupo_filter)
+    if role_filter:
+        usuarios = usuarios.filter(role=role_filter)
     
     if estado_filter == 'activos':
         usuarios = usuarios.filter(is_active=True)
     elif estado_filter == 'inactivos':
         usuarios = usuarios.filter(is_active=False)
     
-    # Obtener todos los grupos para el filtro
-    grupos = Group.objects.all()
+    # Obtener todos los roles para el filtro
+    roles = User.ROLES
     
     # Estadísticas
     stats = {
         'total': User.objects.count(),
         'activos': User.objects.filter(is_active=True).count(),
         'inactivos': User.objects.filter(is_active=False).count(),
-        'administradores': User.objects.filter(groups__name='Administrador').count(),
+        'administradores': User.objects.filter(role__in=['superadmin', 'admin']).count(),
     }
     
     context = {
         'usuarios': usuarios,
-        'grupos': grupos,
+        'roles': roles,
         'stats': stats,
         'search': search,
-        'grupo_filter': grupo_filter,
+        'role_filter': role_filter,
         'estado_filter': estado_filter,
     }
     
@@ -70,7 +73,10 @@ def crear_usuario(request):
         last_name = request.POST.get('last_name')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
-        grupos_ids = request.POST.getlist('grupos')
+        role = request.POST.get('role')
+        cargo = request.POST.get('cargo', '')
+        telefono = request.POST.get('telefono', '')
+        departamento = request.POST.get('departamento', '')
         
         # Validaciones
         if User.objects.filter(username=username).exists():
@@ -92,13 +98,12 @@ def crear_usuario(request):
                 email=email,
                 first_name=first_name,
                 last_name=last_name,
-                password=password
+                password=password,
+                role=role,
+                cargo=cargo,
+                telefono=telefono,
+                departamento=departamento
             )
-            
-            # Asignar grupos
-            if grupos_ids:
-                grupos = Group.objects.filter(id__in=grupos_ids)
-                usuario.groups.set(grupos)
             
             messages.success(request, f'Usuario {username} creado exitosamente.')
             return redirect('core:lista_usuarios')
@@ -108,8 +113,8 @@ def crear_usuario(request):
             return redirect('core:crear_usuario')
     
     # GET request
-    grupos = Group.objects.all()
-    context = {'grupos': grupos}
+    roles = User.ROLES
+    context = {'roles': roles}
     return render(request, 'core/usuarios/crear.html', context)
 
 
@@ -124,7 +129,10 @@ def editar_usuario(request, user_id):
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        grupos_ids = request.POST.getlist('grupos')
+        role = request.POST.get('role')
+        cargo = request.POST.get('cargo', '')
+        telefono = request.POST.get('telefono', '')
+        departamento = request.POST.get('departamento', '')
         is_active = request.POST.get('is_active') == 'on'
         
         # Actualizar usuario
@@ -132,15 +140,12 @@ def editar_usuario(request, user_id):
             usuario.email = email
             usuario.first_name = first_name
             usuario.last_name = last_name
+            usuario.role = role
+            usuario.cargo = cargo
+            usuario.telefono = telefono
+            usuario.departamento = departamento
             usuario.is_active = is_active
             usuario.save()
-            
-            # Actualizar grupos
-            if grupos_ids:
-                grupos = Group.objects.filter(id__in=grupos_ids)
-                usuario.groups.set(grupos)
-            else:
-                usuario.groups.clear()
             
             messages.success(request, f'Usuario {usuario.username} actualizado exitosamente.')
             return redirect('core:lista_usuarios')
@@ -150,13 +155,11 @@ def editar_usuario(request, user_id):
             return redirect('core:editar_usuario', user_id=user_id)
     
     # GET request
-    grupos = Group.objects.all()
-    grupos_usuario = usuario.groups.all()
+    roles = User.ROLES
     
     context = {
         'usuario': usuario,
-        'grupos': grupos,
-        'grupos_usuario': grupos_usuario,
+        'roles': roles,
     }
     return render(request, 'core/usuarios/editar.html', context)
 
@@ -221,17 +224,11 @@ def detalle_usuario(request, user_id):
     """Ver detalles de un usuario"""
     usuario = get_object_or_404(User, id=user_id)
     
-    # Obtener información adicional
-    grupos = usuario.groups.all()
-    permisos = usuario.user_permissions.all()
-    
-    # Última actividad (si tienes un modelo de sesiones o logs)
+    # Última actividad
     last_login = usuario.last_login
     
     context = {
         'usuario': usuario,
-        'grupos': grupos,
-        'permisos': permisos,
         'last_login': last_login,
     }
     

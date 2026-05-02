@@ -4,12 +4,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-def group_required(*group_names):
+def role_required(*role_names):
     """
-    Decorador que verifica si el usuario pertenece a uno de los grupos especificados.
+    Decorador que verifica si el usuario tiene uno de los roles especificados.
     
     Uso:
-        @group_required('Administrador', 'Contador')
+        @role_required('admin', 'contabilidad')
         def mi_vista(request):
             ...
     """
@@ -17,21 +17,18 @@ def group_required(*group_names):
         @wraps(view_func)
         @login_required
         def wrapper(request, *args, **kwargs):
-            # Administrador siempre tiene acceso
-            if request.user.groups.filter(name='Administrador').exists():
+            # Superadmin y Admin siempre tienen acceso
+            if request.user.role in ['superadmin', 'admin']:
                 return view_func(request, *args, **kwargs)
             
-            # Verificar si pertenece a alguno de los grupos requeridos
-            user_groups = request.user.groups.values_list('name', flat=True)
-            has_permission = any(group in user_groups for group in group_names)
-            
-            if has_permission:
+            # Verificar si tiene uno de los roles requeridos
+            if request.user.role in role_names:
                 return view_func(request, *args, **kwargs)
             else:
                 messages.error(
                     request, 
                     f'No tienes permisos para acceder a esta sección. '
-                    f'Se requiere ser: {", ".join(group_names)}'
+                    f'Se requiere ser: {", ".join(role_names)}'
                 )
                 return redirect('core:inicio')
         
@@ -48,47 +45,36 @@ def module_required(module_name):
         def lista_proveedores(request):
             ...
     """
-    # Mapeo de módulos a grupos permitidos
-    module_groups = {
-        'compras': ['Administrador', 'Compras'],
-        'ventas': ['Administrador', 'Ventas'],
-        'contabilidad': ['Administrador', 'Contador'],
-        'configuracion': ['Administrador'],
+    # Mapeo de módulos a roles permitidos
+    module_roles = {
+        'compras': ['superadmin', 'admin', 'compras'],
+        'ventas': ['superadmin', 'admin', 'ventas'],
+        'contabilidad': ['superadmin', 'admin', 'contabilidad', 'auditor'],
+        'tesoreria': ['superadmin', 'admin', 'tesoreria'],
+        'rrhh': ['superadmin', 'admin', 'rrhh'],
+        'nomina': ['superadmin', 'admin', 'nomina', 'rrhh'],
+        'configuracion': ['superadmin', 'admin'],
     }
     
-    allowed_groups = module_groups.get(module_name, ['Administrador'])
+    allowed_roles = module_roles.get(module_name, ['superadmin', 'admin'])
     
     def decorator(view_func):
         @wraps(view_func)
         @login_required
         def wrapper(request, *args, **kwargs):
-            # Administrador siempre tiene acceso
-            if request.user.groups.filter(name='Administrador').exists():
-                return view_func(request, *args, **kwargs)
-            
-            # Consultor tiene acceso de lectura a todo (solo vistas GET)
-            if request.user.groups.filter(name='Consultor').exists():
-                if request.method == 'GET':
-                    return view_func(request, *args, **kwargs)
-                else:
-                    messages.error(
-                        request,
-                        'Como Consultor solo tienes permisos de lectura.'
-                    )
-                    return redirect('core:inicio')
-            
             # Verificar permisos del módulo
-            user_groups = request.user.groups.values_list('name', flat=True)
-            has_permission = any(group in user_groups for group in allowed_groups)
-            
-            if has_permission:
+            if request.user.role in allowed_roles:
                 return view_func(request, *args, **kwargs)
-            else:
-                messages.error(
-                    request,
-                    f'No tienes permisos para acceder al módulo de {module_name.capitalize()}.'
-                )
-                return redirect('core:inicio')
+            
+            # Auditor tiene acceso de lectura a todo (solo vistas GET)
+            if request.user.role == 'auditor' and request.method == 'GET':
+                return view_func(request, *args, **kwargs)
+            
+            messages.error(
+                request,
+                f'No tienes permisos para acceder al módulo de {module_name.capitalize()}.'
+            )
+            return redirect('core:inicio')
         
         return wrapper
     return decorator
@@ -96,7 +82,7 @@ def module_required(module_name):
 
 def admin_required(view_func):
     """
-    Decorador que requiere ser Administrador.
+    Decorador que requiere ser Administrador o Super Administrador.
     
     Uso:
         @admin_required
@@ -106,7 +92,7 @@ def admin_required(view_func):
     @wraps(view_func)
     @login_required
     def wrapper(request, *args, **kwargs):
-        if request.user.groups.filter(name='Administrador').exists() or request.user.is_superuser:
+        if request.user.role in ['superadmin', 'admin'] or request.user.is_superuser:
             return view_func(request, *args, **kwargs)
         else:
             messages.error(

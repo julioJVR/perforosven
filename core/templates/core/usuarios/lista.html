@@ -154,20 +154,19 @@
                         <div class="text-sm text-gray-500">{{ usuario.email|default:"Sin email" }}</div>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="flex flex-wrap gap-1">
-                            {% for grupo in usuario.groups.all %}
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                    {% if grupo.name == 'Administrador' %}bg-purple-100 text-purple-800
-                                    {% elif grupo.name == 'Contador' %}bg-green-100 text-green-800
-                                    {% elif grupo.name == 'Compras' %}bg-blue-100 text-blue-800
-                                    {% elif grupo.name == 'Ventas' %}bg-yellow-100 text-yellow-800
-                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
-                                    {{ grupo.name }}
-                                </span>
-                            {% empty %}
-                                <span class="text-xs text-gray-400">Sin roles</span>
-                            {% endfor %}
-                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                            {% if usuario.role == 'superadmin' %}bg-red-100 text-red-800
+                            {% elif usuario.role == 'admin' %}bg-purple-100 text-purple-800
+                            {% elif usuario.role == 'contabilidad' %}bg-green-100 text-green-800
+                            {% elif usuario.role == 'compras' %}bg-blue-100 text-blue-800
+                            {% elif usuario.role == 'ventas' %}bg-yellow-100 text-yellow-800
+                            {% elif usuario.role == 'tesoreria' %}bg-indigo-100 text-indigo-800
+                            {% elif usuario.role == 'rrhh' %}bg-pink-100 text-pink-800
+                            {% elif usuario.role == 'nomina' %}bg-orange-100 text-orange-800
+                            {% elif usuario.role == 'auditor' %}bg-gray-100 text-gray-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ usuario.get_role_display }}
+                        </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if usuario.is_active %}

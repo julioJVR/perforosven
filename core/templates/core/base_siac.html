@@ -59,6 +59,14 @@
                     if (sub) sub.style.display = 'block';
                 }
 
+                // CONFIGURACION
+                if (path.startsWith('/configuracion')) {
+                    const btn = document.getElementById('btn-submenu-configuracion');
+                    const sub = document.getElementById('submenu-configuracion');
+                    if (btn) btn.classList.add('sidebar-active');
+                    if (sub) sub.style.display = 'block';
+                }
+
             } catch (e) {}
         });
     </script>
