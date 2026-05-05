@@ -1,25 +1,30 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from core.decorators import module_required
 
 from ventas.models.cotizacion import Cotizacion
 from ventas.models.detalle_cotizacion import DetalleCotizacion
 from ventas.models import Contrato, PartidaContrato
-from django.contrib.auth.decorators import login_required
-from core.decorators import module_required
 
 from ventas.forms.cotizacion_form import (
     CotizacionForm,
     DetalleCotizacionFormSet
 )
 
-@module_required('ventas')
 
+@login_required
+@module_required('ventas')
 def cotizaciones_list(request):
     cotizaciones = Cotizacion.objects.all().order_by("-id")
-    return render(request, "ventas/cotizaciones/lista.html", {"cotizaciones": cotizaciones})
+    return render(request, "ventas/cotizaciones/lista.html", {
+        "cotizaciones": cotizaciones
+    })
 
 
+@login_required
+@module_required('ventas')
 def cotizacion_create(request):
     cotizacion = Cotizacion()
     form = CotizacionForm(request.POST or None)
@@ -34,10 +39,13 @@ def cotizacion_create(request):
             return redirect("ventas:cotizaciones")
 
     return render(request, "ventas/cotizaciones/form.html", {
-        "form": form, "formset": formset
+        "form": form,
+        "formset": formset
     })
 
 
+@login_required
+@module_required('ventas')
 def cotizacion_edit(request, pk):
     cotizacion = get_object_or_404(Cotizacion, pk=pk)
     form = CotizacionForm(request.POST or None, instance=cotizacion)
@@ -57,7 +65,8 @@ def cotizacion_edit(request, pk):
     })
 
 
-# --- API JSON para cargar partidas según contrato seleccionado ---
+@login_required
+@module_required('ventas')
 def partidas_por_contrato(request, contrato_id):
     partidas = PartidaContrato.objects.filter(contrato_id=contrato_id)
 
@@ -71,5 +80,3 @@ def partidas_por_contrato(request, contrato_id):
     ]
 
     return JsonResponse({"partidas": data})
-
-

@@ -246,7 +246,7 @@
                         </ul>
                     </li>
 
-                    <!-- Otros (desactivados visualmente si no implementados) -->
+                <!-- Otros (desactivados visualmente si no implementados) -->
                     
                     <li>
                         <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
@@ -282,13 +282,23 @@
                             <span>Recursos Humanos</span>
                         </a>
                     </li>
+                    
+                        <button id="btn-submenu-configuracion" onclick="toggleMenu('submenu-configuracion')" 
+                                class="sidebar-link w-full text-left rounded hover:bg-blue-700">
+                            <i class="bi bi-cash-coin text-lg"></i>
+                            <span>Configuracion</span>
+                            <i class="bi bi-chevron-down ml-auto"></i>
+                        </button>
 
-                    <li>
-                        <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
-                            <i class="bi bi-gear-fill text-lg"></i>
-                            <span>Configuración</span>
-                        </a>
-                    </li>
+                        <ul id="submenu-configuracion" class="submenu mt-2 space-y-1">
+
+                            <li>
+                                <a href="{% url 'core:lista_usuarios' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Panel</span>
+                                </a>
+                            </li>
+                        </ul>
 
                     <li>
                         <a class="sidebar-link rounded opacity-70 cursor-not-allowed">
@@ -296,6 +306,8 @@
                             <span>Ayuda</span>
                         </a>
                     </li>
+
+                    
 
                 </ul>
             </nav>

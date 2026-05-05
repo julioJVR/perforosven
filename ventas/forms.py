@@ -4,6 +4,7 @@ from .models.contrato import Contrato
 from django.contrib.auth.decorators import login_required
 from core.decorators import module_required
 
+@login_required
 @module_required('ventas')
 class ClienteForm(forms.ModelForm):
     class Meta:

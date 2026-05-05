@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from ..models.cliente import Cliente
-from ..forms.cliente_form import ClienteForm
 from django.contrib.auth.decorators import login_required
 from core.decorators import module_required
 
-@module_required('ventas')
+from ..models.cliente import Cliente
+from ..forms.cliente_form import ClienteForm
 
+
+@login_required
+@module_required('ventas')
 def clientes_list(request):
     clientes = Cliente.objects.all().order_by('nombre')
     return render(request, 'ventas/clientes/lista.html', {
@@ -13,6 +15,8 @@ def clientes_list(request):
     })
 
 
+@login_required
+@module_required('ventas')
 def cliente_create(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
@@ -28,6 +32,8 @@ def cliente_create(request):
     })
 
 
+@login_required
+@module_required('ventas')
 def cliente_edit(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
 

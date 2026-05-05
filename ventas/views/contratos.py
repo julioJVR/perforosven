@@ -1,25 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from core.decorators import module_required
 
-
-
 from ventas.models import Contrato, PartidaContrato
-from ventas.forms.contrato_form import (
-    ContratoForm,
-    PartidaContratoFormSet
-)
+from ventas.forms.contrato_form import ContratoForm, PartidaContratoFormSet
 
+
+@login_required
 @module_required('ventas')
-
 def contratos_list(request):
     contratos = Contrato.objects.all().order_by("-id")
     return render(request, "ventas/contratos/lista.html", {"contratos": contratos})
 
 
+@login_required
+@module_required('ventas')
 def contrato_create(request):
     contrato = Contrato()
     form = ContratoForm(request.POST or None)
@@ -40,6 +37,8 @@ def contrato_create(request):
     )
 
 
+@login_required
+@module_required('ventas')
 def contrato_edit(request, pk):
     contrato = get_object_or_404(Contrato, pk=pk)
     form = ContratoForm(request.POST or None, instance=contrato)
@@ -59,20 +58,28 @@ def contrato_edit(request, pk):
     )
 
 
+@login_required
+@module_required('ventas')
 def contrato_delete(request, pk):
     contrato = get_object_or_404(Contrato, pk=pk)
-    contrato.delete()
-    messages.success(request, "Contrato eliminado.")
-    return redirect("ventas:contratos")
+
+    if request.method == "POST":
+        contrato.delete()
+        messages.success(request, "Contrato eliminado.")
+        return redirect("ventas:contratos")
+
+    return render(
+        request,
+        "ventas/contratos/confirm_delete.html",
+        {"contrato": contrato}
+    )
 
 
-# === API PARA COTIZACIONES ===
+@login_required
+@module_required('ventas')
 def obtener_partidas_contrato(request, pk):
-    """
-    API JSON que envía detalles del contrato 
-    para usar en cotizaciones.
-    """
     contrato = get_object_or_404(Contrato, pk=pk)
+
     data = [
         {
             "id": p.id,
@@ -81,4 +88,5 @@ def obtener_partidas_contrato(request, pk):
         }
         for p in contrato.partidas.all()
     ]
+
     return JsonResponse({"partidas": data})

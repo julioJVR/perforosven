@@ -4,6 +4,7 @@ from ventas.forms import DetalleCotizacionForm
 from django.contrib.auth.decorators import login_required
 from core.decorators import module_required
 
+@login_required
 @module_required('ventas')
 
 def detalles_cotizacion(request, cotizacion_id):
