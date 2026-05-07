@@ -283,22 +283,32 @@
                         </a>
                     </li>
                     
+                    <li>
                         <button id="btn-submenu-configuracion" onclick="toggleMenu('submenu-configuracion')" 
                                 class="sidebar-link w-full text-left rounded hover:bg-blue-700">
-                            <i class="bi bi-cash-coin text-lg"></i>
-                            <span>Configuracion</span>
+                            <i class="bi bi-gear-fill text-lg"></i>
+                            <span>Configuración</span>
                             <i class="bi bi-chevron-down ml-auto"></i>
                         </button>
-
+                    
                         <ul id="submenu-configuracion" class="submenu mt-2 space-y-1">
-
+                    
                             <li>
-                                <a href="{% url 'core:lista_usuarios' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                <a href="{% url 'configuracion:dashboard' %}" class="sidebar-link rounded hover:bg-blue-700">
                                     <i class="bi bi-speedometer2"></i>
                                     <span>Panel</span>
                                 </a>
                             </li>
+                    
+                            <li>
+                                <a href="{% url 'core:lista_usuarios' %}" class="sidebar-link rounded hover:bg-blue-700">
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Usuarios</span>
+                                </a>
+                            </li>
+                    
                         </ul>
+                    </li>
 
                     <li>
                         <a class="sidebar-link rounded opacity-70 cursor-not-allowed">

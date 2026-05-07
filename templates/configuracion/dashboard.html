@@ -1,0 +1,94 @@
+{% extends 'core/base_siac.html' %}
+
+{% block title %}
+Configuración | SIAC Perforosven
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-7xl mx-auto">
+
+    <!-- Título -->
+    <div class="mb-10 text-center">
+        <h1 class="text-4xl font-bold text-gray-800">
+            Panel del Módulo de Configuración
+        </h1>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+
+        <!-- Usuarios -->
+        <a href="{% url 'core:lista_usuarios' %}"
+           class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 text-center">
+
+            <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-5">
+                <i class="bi bi-people-fill text-3xl text-blue-600"></i>
+            </div>
+
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+                Usuarios
+            </h2>
+
+            <p class="text-gray-500">
+                Administración de accesos
+            </p>
+
+        </a>
+
+        <!-- Permisos -->
+        <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 text-center">
+
+            <div class="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-5">
+                <i class="bi bi-shield-lock-fill text-3xl text-green-600"></i>
+            </div>
+
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+                Permisos
+            </h2>
+
+            <p class="text-gray-500">
+                Roles y privilegios
+            </p>
+
+        </div>
+
+        <!-- Parámetros -->
+        <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 text-center">
+
+            <div class="w-16 h-16 mx-auto rounded-full bg-yellow-100 flex items-center justify-center mb-5">
+                <i class="bi bi-sliders text-3xl text-yellow-600"></i>
+            </div>
+
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+                Parámetros
+            </h2>
+
+            <p class="text-gray-500">
+                Configuración global
+            </p>
+
+        </div>
+
+        <!-- Auditoría -->
+        <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 text-center">
+
+            <div class="w-16 h-16 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-5">
+                <i class="bi bi-journal-check text-3xl text-red-600"></i>
+            </div>
+
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+                Auditoría
+            </h2>
+
+            <p class="text-gray-500">
+                Historial del sistema
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
