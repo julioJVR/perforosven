@@ -1,3 +1,5 @@
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -87,9 +89,18 @@ def crear_usuario(request):
             messages.error(request, 'Las contraseñas no coinciden.')
             return redirect('core:crear_usuario')
         
-        if len(password) < 8:
-            messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
+
+        # Validar fortaleza de contraseña
+        try:
+            validate_password(password)
+        except DjangoValidationError as e:
+            for error in e.messages:
+                messages.error(request, error)
             return redirect('core:crear_usuario')
+             
+        #if len(password) < 8:
+            #messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
+            #return redirect('core:crear_usuario')
         
         # Crear usuario
         try:
@@ -179,9 +190,19 @@ def cambiar_password(request, user_id):
             messages.error(request, 'Las contraseñas no coinciden.')
             return redirect('core:cambiar_password', user_id=user_id)
         
-        if len(password) < 8:
-            messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
-            return redirect('core:cambiar_password', user_id=user_id)
+
+        # Validar fortaleza de contraseña
+        try:
+            validate_password(password)
+        except DjangoValidationError as e:
+            for error in e.messages:
+                messages.error(request, error)
+            return redirect('core:crear_usuario')
+
+        
+        #if len(password) < 8:
+            #messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
+            #return redirect('core:cambiar_password', user_id=user_id)
         
         # Cambiar contraseña
         try:

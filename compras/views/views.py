@@ -12,8 +12,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from openpyxl import Workbook
 
-from .models import Proveedor, Producto, OrdenCompra, Factura
-from .forms import ProveedorForm, ProductoForm, OrdenCompraForm, FacturaForm
+from ..models import Proveedor, Producto, OrdenCompra, Factura
+from ..forms import ProveedorForm, ProductoForm, OrdenCompraForm, FacturaForm
 
 
 logger = logging.getLogger(__name__)

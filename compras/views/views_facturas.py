@@ -4,8 +4,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from decimal import Decimal
 
-from .models import Factura, Proveedor
-from .forms import FacturaForm
+from ..models import Factura, Proveedor
+from ..forms import FacturaForm
 
 from django.utils import timezone
 from django.db.models import Q, Sum, F, ExpressionWrapper, DecimalField
@@ -143,7 +143,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Q, Sum, F, ExpressionWrapper, DecimalField
 from decimal import Decimal
-from .models import Factura, Proveedor, OrdenCompra
+from ..models import Factura, Proveedor, OrdenCompra
 
 
 

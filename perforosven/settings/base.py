@@ -142,6 +142,7 @@ DATABASES = {
 # ============================================================
 # 🔹 VALIDADORES DE CONTRASEÑA
 # ============================================================
+# Validadores de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -153,10 +154,13 @@ AUTH_PASSWORD_VALIDATORS = [
         }
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'accounts.password_validators.ComplexPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'accounts.password_validators.NoCommonPasswordValidator',
+    },
+    {
+        'NAME': 'accounts.password_validators.NoUserAttributeSimilarityValidator',
     },
 ]
 
